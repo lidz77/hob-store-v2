@@ -1,4 +1,6 @@
 import React,{useState} from 'react';
+import {NavLink, Outlet} from 'react-router-dom';
+import ROUTES from './ROUTES';
 import {styled, useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiAppBar from '@mui/material/AppBar';
@@ -19,6 +21,9 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import CategoryIcon from '@mui/icons-material/Category';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import CategoriesList from '../features/admin/categories/CategoriesList';
+import ProductsList from '../features/admin/products/ProductsList';
+import OrdersList from '../features/admin/orders/OrdersList';
 
 const drawerWidth = 240;
 
@@ -96,21 +101,30 @@ const Administration = () => {
   const handleDrawerClose = () => {
     setOpen(false);
   }
-  const renderIcon = (text) => {
+  const renderElement = (text) => {
     switch (text) {
       case 'Categories':
-        return <CategoryIcon />;
+        return {
+          route: ROUTES.categoriesAdmin(),
+          icon: <CategoryIcon />,
+        component: <CategoriesList />
+        };
       case 'Products':
-        return <InventoryIcon />;
-      default: return <ShoppingCartIcon />;
+        return {
+          route: ROUTES.productsAdmin(),
+          icon: <InventoryIcon />,
+        component: <ProductsList />
+        }
+      default: return {
+        route: ROUTES.ordersAdmin(),
+        icon: <ShoppingCartIcon />,
+      component: <OrdersList />
+      }
     }
   }
 
   return (
     <div>
-      <span>
-        this is admin page
-      </span>
       <Box sx={{display: 'flex'}}>
         <CssBaseline />
         <AppBar position="fixed" open={open}>
@@ -128,7 +142,7 @@ const Administration = () => {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" noWrap component="div">
-              Mini variant drawer
+              CRM
             </Typography>
           </Toolbar>
         </AppBar>
@@ -146,6 +160,8 @@ const Administration = () => {
                   key={index}
                   disablePadding
                   sx={{display: 'block'}}
+                  component={NavLink}
+                  to={renderElement(item).route}
                   >
                   <ListItemButton
                     sx={{
@@ -161,7 +177,7 @@ const Administration = () => {
                         justifyContent: 'center'
                       }}
                       >
-                      {renderIcon(item)}
+                      {renderElement(item).icon}
                     </ListItemIcon>
                     <ListItemText
                       primary={item}
@@ -173,6 +189,10 @@ const Administration = () => {
              })}
           </List>
         </Drawer>
+        <Box component="main" sx={{ flexGrow: 1, p:3}}>
+          <DrawerHeader />
+          <Outlet />
+        </Box>
       </Box>
     </div>
   )

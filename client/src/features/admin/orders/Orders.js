@@ -1,6 +1,6 @@
 import React from 'react'
 
-const OrdersList = (props) => {
+const Orders = (props) => {
   return (
     <main>
       <span>Orders List</span>
@@ -11,4 +11,4 @@ const OrdersList = (props) => {
   )
 }
 
-export default OrdersList
+export default Orders

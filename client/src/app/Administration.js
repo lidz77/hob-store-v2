@@ -21,9 +21,9 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import CategoryIcon from '@mui/icons-material/Category';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import CategoriesList from '../features/admin/categories/CategoriesList';
-import ProductsList from '../features/admin/products/ProductsList';
-import OrdersList from '../features/admin/orders/OrdersList';
+import Categories from '../features/admin/categories/Categories';
+import Products from '../features/admin/products/Products';
+import Orders from '../features/admin/orders/Orders';
 
 const drawerWidth = 240;
 
@@ -107,18 +107,18 @@ const Administration = () => {
         return {
           route: ROUTES.categoriesAdmin(),
           icon: <CategoryIcon />,
-        component: <CategoriesList />
+        component: <Categories />
         };
       case 'Products':
         return {
           route: ROUTES.productsAdmin(),
           icon: <InventoryIcon />,
-        component: <ProductsList />
+        component: <Products />
         }
       default: return {
         route: ROUTES.ordersAdmin(),
         icon: <ShoppingCartIcon />,
-      component: <OrdersList />
+      component: <Orders />
       }
     }
   }

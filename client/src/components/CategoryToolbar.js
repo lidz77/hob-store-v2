@@ -1,4 +1,5 @@
 import React,{useState} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 import Toolbar from '@mui/material/Toolbar';
 import {styled, alpha} from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -11,6 +12,8 @@ import Modal from '@mui/material/Modal';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import AddCategory from '../features/admin/categories/AddCategory';
 import BasicToolbar from './BasicToolbar';
+
+import {selectSearchTerm, setSearchTerm} from '../features/admin/categories/categoriesSlice';
 
 const style = {
   position: 'absolute',
@@ -65,9 +68,14 @@ const StyleInputBase = styled(InputBase)(({theme}) => ({
 }));
 
 const CategoryToolbar = () => {
+  const dispatch = useDispatch();
+  const searchText = useSelector(selectSearchTerm);
   const [modalOpen, setModalOpen] = useState(false);
   const handleModal = () => {
     setModalOpen(!modalOpen);
+  }
+  const handleChangeText = (e) => {
+    dispatch(setSearchTerm(e.target.value));
   }
 
   return (
@@ -125,6 +133,8 @@ const CategoryToolbar = () => {
           <StyleInputBase
             placeholder="Search..."
             inputProps={{ 'aria-label': 'search'}}
+            value={searchText}
+            onChange={handleChangeText}
             />
         </Search>
       </Toolbar>

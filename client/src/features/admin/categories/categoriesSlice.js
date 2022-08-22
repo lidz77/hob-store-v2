@@ -20,10 +20,13 @@ const categoriesSlice = createSlice({
     newCategoryInfo: {},
     categoriesList: [],
     isLoading: true,
-    hasError: false
+    hasError: false,
+    searchTerm: ''
   },
   reducers: {
-
+    setSearchTerm: (state, action) => {
+      state.searchTerm = action.payload;
+    }
   },
   extraReducers: {
     // [addCategory.pending]: (state, action) => {
@@ -56,11 +59,19 @@ const categoriesSlice = createSlice({
 });
 
 
+export const {setSearchTerm} = categoriesSlice.actions;
+
+export const selectSearchTerm = (state) => {
+  return state.categories.searchTerm;
+}
 export const isLoadingCategories = (state) => {
   return state.categories.isLoading;
 }
 export const selectCategories = (state) => {
   return state.categories.categoriesList;
+}
+export const selectVisibleCategories = (state) => {
+  return state.categories.categoriesList.filter(item => item.title.toLowerCase().includes(state.categories.searchTerm.toLowerCase()));
 }
 
 export default categoriesSlice.reducer;

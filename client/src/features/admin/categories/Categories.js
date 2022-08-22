@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import CategoryToolbar from '../../../components/CategoryToolbar';
 
 const Categories = () => {
+
   return (
     <main>
       <Box>

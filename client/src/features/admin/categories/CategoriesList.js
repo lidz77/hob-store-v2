@@ -1,6 +1,10 @@
 import React, {useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {loadCategories, selectCategories, isLoadingCategories} from './categoriesSlice';
+import {
+  loadCategories,
+  selectVisibleCategories,
+  isLoadingCategories,
+} from './categoriesSlice';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import TableContainer from '@mui/material/TableContainer';
@@ -14,15 +18,13 @@ import TableBody from '@mui/material/TableBody';
 const CategoresList = () => {
   const dispatch = useDispatch();
   const categoriesIsLoading = useSelector(isLoadingCategories);
-  const categoriesList = useSelector(selectCategories);
-  const columns = ['id', 'title', 'description', 'published'];
-
-
+  const filteredCategoriesList = useSelector(selectVisibleCategories);
+  const columns = ['ID', 'Title', 'Description', 'Published'];
+  
   useEffect(() => {
     dispatch(loadCategories());
   }, [dispatch])
 
-  console.log(categoriesList);
   return (
     <Box sx={{ flexGrow : 1}}>
       <Paper sx={{width: '100%', overflow: 'hidden'}}>
@@ -42,7 +44,7 @@ const CategoresList = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {categoriesList.map((item, index) => {
+                  {filteredCategoriesList.map((item, index) => {
                     return (
                       <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                         <TableCell>

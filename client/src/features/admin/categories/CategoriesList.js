@@ -13,6 +13,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import TableBody from '@mui/material/TableBody';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 
 const CategoresList = () => {
@@ -20,7 +22,7 @@ const CategoresList = () => {
   const categoriesIsLoading = useSelector(isLoadingCategories);
   const filteredCategoriesList = useSelector(selectVisibleCategories);
   const columns = ['ID', 'Title', 'Description', 'Published'];
-  
+
   useEffect(() => {
     dispatch(loadCategories());
   }, [dispatch])
@@ -28,7 +30,21 @@ const CategoresList = () => {
   return (
     <Box sx={{ flexGrow : 1}}>
       <Paper sx={{width: '100%', overflow: 'hidden'}}>
-        {categoriesIsLoading ? (<h2>Category is loading</h2>):(
+        {categoriesIsLoading ? (
+          <Backdrop
+            sx={{color: '#fff',
+              zIndex: (theme) => theme.zIndex.drawer + 1
+            }}
+            open={true}
+            transitionDuration={{
+              appear: 5000,
+              enter: 5000,
+              exit: 5000
+            }}
+            >
+            <CircularProgress color="inherit"/>
+          </Backdrop>
+        ):(
           <TableContainer sx={{maxHeight: 400}}>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>

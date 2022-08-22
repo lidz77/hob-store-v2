@@ -8,10 +8,8 @@ import InputBase from '@mui/material/InputBase';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import IconButton from '@mui/material/IconButton';
 import ModeIcon from '@mui/icons-material/Mode';
-import Modal from '@mui/material/Modal';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import AddCategory from '../features/admin/categories/AddCategory';
-import BasicToolbar from './BasicToolbar';
 
 import {selectSearchTerm, setSearchTerm} from '../features/admin/categories/categoriesSlice';
 
@@ -70,9 +68,9 @@ const StyleInputBase = styled(InputBase)(({theme}) => ({
 const CategoryToolbar = () => {
   const dispatch = useDispatch();
   const searchText = useSelector(selectSearchTerm);
-  const [modalOpen, setModalOpen] = useState(false);
-  const handleModal = () => {
-    setModalOpen(!modalOpen);
+  const [openDialog, setOpenDialog] = useState(false);
+  const handleDialog = () => {
+    setOpenDialog(!openDialog);
   }
   const handleChangeText = (e) => {
     dispatch(setSearchTerm(e.target.value));
@@ -87,27 +85,15 @@ const CategoryToolbar = () => {
             size="large"
             aria-label="Add new category"
             color="inherit"
-            onClick={handleModal}
+            onClick={handleDialog}
             >
             <PostAddIcon />
           </IconButton>
-          <Modal
-            open={modalOpen}
-            onClose={handleModal}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-            >
-            <Box sx={style}>
-              <BasicToolbar
-                title={'Add new category'}
-                onCloseButton={() => setModalOpen(false)}
-                />
-              <AddCategory
-                title={'Add new category'}
-                onSucceed={() => setModalOpen(false)}
-                />
-            </Box>
-          </Modal>
+          <AddCategory
+            open={openDialog}
+            handleDialog={handleDialog}
+            onSucceed={() => setOpenDialog(false)}
+            />
         </Box>
         <Box sx={{display: {xs: 'none', md: 'flex'}}}>
           <IconButton

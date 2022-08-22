@@ -104,6 +104,7 @@ const CategoryToolbar = () => {
                 />
               <AddCategory
                 title={'Add new category'}
+                onSucceed={() => setModalOpen(false)}
                 />
             </Box>
           </Modal>

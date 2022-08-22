@@ -12,6 +12,18 @@ export const loadCategories = createAsyncThunk(
     });
     return res;
   }
+);
+
+export const addCategory = createAsyncThunk(
+  'categories/addCategory',
+  async (newCategoryInfo) => {
+    const res = await CategoriesDataService.create(newCategoryInfo).then((result) => {
+      return result.data;
+    }).catch((err) => {
+      console.log(err)
+    });
+    return res;
+  }
 )
 
 const categoriesSlice = createSlice({
@@ -29,19 +41,6 @@ const categoriesSlice = createSlice({
     }
   },
   extraReducers: {
-    // [addCategory.pending]: (state, action) => {
-    //   state.isLoading = true;
-    //   state.hasError = false;
-    // },
-    // [addCategory.fulfilled]: (state, action) => {
-    //   state.newCategoryInfo.push(action.payload);
-    //   state.isLoading = false;
-    //   state.hasError = false;
-    // },
-    // [addCategory.rejected]: (state, action) => {
-    //   state.isLoading = false;
-    //   state.hasError = true;
-    // },
     [loadCategories.pending]: (state) => {
       state.isLoading = true;
       state.hasError = false;
@@ -52,6 +51,23 @@ const categoriesSlice = createSlice({
       state.hasError = false;
     },
     [loadCategories.rejected]: (state) => {
+      state.isLoading = false;
+      state.hasError = true;
+    },
+    [addCategory.pending]: (state, action) => {
+      state.isLoading = true;
+      state.hasError = false;
+    },
+    [addCategory.fulfilled]: (state, action) => {
+      state.newCategoryInfo = action.payload;
+      state.isLoading = false;
+      state.hasError = false;
+      state.categoriesList.push({
+        ...action.payload,
+          published: false
+      })
+    },
+    [addCategory.rejected]: (state, action) => {
       state.isLoading = false;
       state.hasError = true;
     },

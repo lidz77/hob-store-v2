@@ -10,6 +10,7 @@ import ModeIcon from '@mui/icons-material/Mode';
 import Modal from '@mui/material/Modal';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import AddCategory from '../features/admin/categories/AddCategory';
+import BasicToolbar from './BasicToolbar';
 
 const style = {
   position: 'absolute',
@@ -89,7 +90,13 @@ const CategoryToolbar = () => {
             aria-describedby="modal-modal-description"
             >
             <Box sx={style}>
-              <AddCategory />
+              <BasicToolbar
+                title={'Add new category'}
+                onCloseButton={() => setModalOpen(false)}
+                />
+              <AddCategory
+                title={'Add new category'}
+                />
             </Box>
           </Modal>
         </Box>

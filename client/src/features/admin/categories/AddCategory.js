@@ -4,16 +4,12 @@ import FormGroup from '@mui/material/FormGroup';
 import InputLabel from '@mui/material/InputLabel';
 import Input from '@mui/material/Input';
 import Box from '@mui/material/Box';
-import BasicToolbar from '../../../components/BasicToolbar';
 import Fab from '@mui/material/Fab';
 import DoneIcon from '@mui/icons-material/Done';
 
 const AddCategory = () => {
   return (
     <form id="add-category">
-      <BasicToolbar
-        title={'Add new Category'}
-        />
       <Box sx={{flexGrow : 1}} />
       <FormControl>
         <InputLabel htmlFor="category-name">Name: </InputLabel>

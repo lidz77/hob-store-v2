@@ -6,7 +6,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 
-const BasicToolbar = ({title, onClose}) => {
+const BasicToolbar = ({title, onCloseButton}) => {
   return (
     <Container>
       <Toolbar position="fixed" >
@@ -21,8 +21,10 @@ const BasicToolbar = ({title, onClose}) => {
             size="large"
             aria-label="Add new category"
             color="inherit"
+            onClick={onCloseButton}
             >
-            <CloseIcon />
+            <CloseIcon
+              />
           </IconButton>
         </Box>
       </Toolbar>

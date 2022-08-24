@@ -15,13 +15,15 @@ import TableCell from '@mui/material/TableCell';
 import TableBody from '@mui/material/TableBody';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Checkbox from '@mui/material/Checkbox';
 
-
-const CategoresList = () => {
+const CategoresList = ({handleDialog, handleDelete}) => {
   const dispatch = useDispatch();
   const categoriesIsLoading = useSelector(isLoadingCategories);
   const filteredCategoriesList = useSelector(selectVisibleCategories);
-  const columns = ['ID', 'Title', 'Description', 'Published'];
+  const columns = ['Select', 'ID', 'Title', 'Description', 'Published', 'Actions'];
 
   useEffect(() => {
     dispatch(loadCategories());
@@ -63,6 +65,9 @@ const CategoresList = () => {
                   {filteredCategoriesList.map((item, index) => {
                     return (
                       <TableRow hover role="checkbox" tabIndex={-1} key={index}>
+                        <TableCell padding="checkbox">
+                          <Checkbox/>
+                        </TableCell>
                         <TableCell>
                           {item.id}
                         </TableCell>
@@ -74,6 +79,14 @@ const CategoresList = () => {
                         </TableCell>
                         <TableCell>
                           {item.published ? 'Published' : 'Unpublished'}
+                        </TableCell>
+                        <TableCell>
+                          <ButtonGroup>
+                            <Button color="secondary"
+                              onClick={() => handleDialog(true)}
+                              >Edit</Button>
+                            <Button variant="outlined" color="error">Delete</Button>
+                          </ButtonGroup>
                         </TableCell>
                       </TableRow>
                     )}

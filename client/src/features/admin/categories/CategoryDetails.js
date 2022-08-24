@@ -6,24 +6,32 @@ import FormGroup from '@mui/material/FormGroup';
 import InputLabel from '@mui/material/InputLabel';
 import Input from '@mui/material/Input';
 import Box from '@mui/material/Box';
-import Fab from '@mui/material/Fab';
 import DoneIcon from '@mui/icons-material/Done';
 import Dialog from '@mui/material/Dialog';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import DialogTitle from '@mui/material/DialogTitle';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
 
-
-const AddCategory = ({open, handleDialog}) => {
+const CategoryDetails = ({open, handleDialog, info}) => {
   const dispatch = useDispatch();
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [title, setTitle] = useState(info.title);
+  const [description, setDescription] = useState(info.description);
+  const [published, setPublished] = useState(info.published);
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(addCategory({
       title: title,
-      description: description
+      description: description,
+      published: published
     }))
+    setTitle('');
+    setDescription('');
+    setPublished(false);
+    handleDialog();
   }
   return (
     <Dialog
@@ -36,7 +44,7 @@ const AddCategory = ({open, handleDialog}) => {
           padding: (theme) => theme.spacing(2),
         }}
         >
-        Add new category
+        {info.length === 0 ? 'Edit category' : 'Add new category' }
         <IconButton
           sx={{
             position: 'absolute',
@@ -53,36 +61,49 @@ const AddCategory = ({open, handleDialog}) => {
           onSubmit={handleSubmit}
           >
         <Box sx={{flexGrow : 1}} />
+        <FormGroup>
         <FormControl>
           <InputLabel htmlFor="category-name">Name: </InputLabel>
           <Input
             id="category-name"
             aria-describedby="my-helper-text"
-            value={title}
+            value={title || ''}
             onChange={(e) => setTitle(e.target.value)}
             required
             />
         </FormControl>
         <Box sx={{flexGrow : 5}} />
         <FormControl>
-          <FormGroup>
             <InputLabel htmlFor="category-description">Description</InputLabel>
             <Input
               id="category-description"
               aria-describedby="my-helper-text"
-              value={description}
+              value={description || ''}
               onChange={(e)=> setDescription(e.target.value)}
               />
-          </FormGroup>
         </FormControl>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={published || false}
+                onChange={()=>setPublished(!published)}
+                />} label="Publised" />
         <FormControl>
-          <Fab type="submit">
-            <DoneIcon color="secondary" />
-          </Fab>
+            <BottomNavigation
+              showLabels
+              >
+              <BottomNavigationAction label="Done"
+                type="submit"
+                icon={<DoneIcon />} />
+              <BottomNavigationAction
+                onClick={handleDialog}
+                label="Cancel" icon={<CloseIcon />} />
+            </BottomNavigation>
         </FormControl>
+      </FormGroup>
     </form>
   </Dialog>
   )
 }
 
-export default AddCategory
+export default CategoryDetails

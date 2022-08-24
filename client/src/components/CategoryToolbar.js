@@ -1,5 +1,4 @@
-import React,{useState} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import React from 'react';
 import Toolbar from '@mui/material/Toolbar';
 import {styled, alpha} from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -7,25 +6,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import IconButton from '@mui/material/IconButton';
-import ModeIcon from '@mui/icons-material/Mode';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import AddCategory from '../features/admin/categories/AddCategory';
 
-import {selectSearchTerm, setSearchTerm} from '../features/admin/categories/categoriesSlice';
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-  padding:2,
-};
-
+//styles
 const Search = styled('div')(({theme}) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -65,16 +48,8 @@ const StyleInputBase = styled(InputBase)(({theme}) => ({
   },
 }));
 
-const CategoryToolbar = () => {
-  const dispatch = useDispatch();
-  const searchText = useSelector(selectSearchTerm);
-  const [openDialog, setOpenDialog] = useState(false);
-  const handleDialog = () => {
-    setOpenDialog(!openDialog);
-  }
-  const handleChangeText = (e) => {
-    dispatch(setSearchTerm(e.target.value));
-  }
+//main function
+const CategoryToolbar = ({handleDialog, searchText, handleSearchTerm}) => {
 
   return (
     <Box>
@@ -88,20 +63,6 @@ const CategoryToolbar = () => {
             onClick={handleDialog}
             >
             <PostAddIcon />
-          </IconButton>
-          <AddCategory
-            open={openDialog}
-            handleDialog={handleDialog}
-            onSucceed={() => setOpenDialog(false)}
-            />
-        </Box>
-        <Box sx={{display: {xs: 'none', md: 'flex'}}}>
-          <IconButton
-            size="large"
-            aria-label="Edit category"
-            color="inherit"
-            >
-            <ModeIcon />
           </IconButton>
         </Box>
         <Box sx={{display: {xs: 'none', md: 'flex'}}}>
@@ -121,7 +82,7 @@ const CategoryToolbar = () => {
             placeholder="Search..."
             inputProps={{ 'aria-label': 'search'}}
             value={searchText}
-            onChange={handleChangeText}
+            onChange={handleSearchTerm}
             />
         </Search>
       </Toolbar>

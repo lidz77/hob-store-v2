@@ -20,9 +20,6 @@ exports.findAll = (req, res) => {
 
 //create new category;
 exports.create = (req, res) => {
-
-  console.log(req.body);
-
   if(!req.body.title){
     res.status(400).send({
       message: "Content cant be empty"
@@ -43,4 +40,31 @@ exports.create = (req, res) => {
       message: err.message || 'Error while creating category'
     })
   });
+}
+
+//delete
+
+exports.delete = (req, res) => {
+  console.log(req);
+  const id = req.body.id;
+  Categories.destroy({
+    where:{
+      id: id
+    }
+  }).then((result) => {
+    if(result > 0){
+      res.send({
+        message: `ID ${id} delete successfully`
+      })
+    }else{
+      res.send({
+        message: `Could not delete id ${id}`
+      })
+    }
+  }).catch((err) => {
+    res.status(500).send({
+      message: `Could not delete id ${id} due to ${err}`
+    })
+  })
+
 }

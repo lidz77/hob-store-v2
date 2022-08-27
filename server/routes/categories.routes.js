@@ -4,6 +4,7 @@ module.exports = (app) => {
 
   categoriesRouter.post('/add',categoriesController.create);
   categoriesRouter.get('/', categoriesController.findAll);
+  categoriesRouter.delete('/',categoriesController.delete);
 
   app.use('/api/categories', categoriesRouter);
 }

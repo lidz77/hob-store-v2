@@ -26,6 +26,19 @@ export const addCategory = createAsyncThunk(
   }
 )
 
+export const deleteCategory = createAsyncThunk(
+  'categories/deleteCategory',
+  async (idArray) => {
+    console.log(idArray)
+    const res = await CategoriesDataService.delete(idArray).then((result) => {
+      return result.data;
+    }).catch((err) => {
+      console.log(err);
+    });
+    return res;
+  }
+)
+
 const categoriesSlice = createSlice({
   name: 'categories',
   initialState: {
@@ -68,6 +81,20 @@ const categoriesSlice = createSlice({
       })
     },
     [addCategory.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.hasError = true;
+    },
+    [deleteCategory.pending]: (state, action) => {
+      state.isLoading = true;
+      state.hasError = false;
+    },
+    [deleteCategory.fulfilled]: (state, action) => {
+      console.log(action.payload);
+      // state.categoriesList.filter(item => !action.payload.includes(item.id));
+      state.isLoading = false;
+      state.hasError = false;
+    },
+    [deleteCategory.rejected]: (state, action) => {
       state.isLoading = false;
       state.hasError = true;
     },

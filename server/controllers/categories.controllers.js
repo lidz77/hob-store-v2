@@ -46,25 +46,24 @@ exports.create = (req, res) => {
 
 exports.delete = (req, res) => {
   console.log(req);
-  const id = req.body.id;
+  const idArray = req.query.idArray;
   Categories.destroy({
     where:{
-      id: id
+      id: idArray
     }
   }).then((result) => {
     if(result > 0){
       res.send({
-        message: `ID ${id} delete successfully`
+        message: `ID ${idArray} delete successfully`
       })
     }else{
       res.send({
-        message: `Could not delete id ${id}`
+        message: `Could not delete id ${idArray}`
       })
     }
   }).catch((err) => {
     res.status(500).send({
-      message: `Could not delete id ${id} due to ${err}`
+      message: `Could not delete id ${idArray} due to ${err}`
     })
   })
-
 }

@@ -1,5 +1,6 @@
 import React,{useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
+import {deleteCategory} from './categoriesSlice';
 import {selectSearchTerm, setSearchTerm} from './categoriesSlice';
 import CategoresList from './CategoriesList';
 import Box from '@mui/material/Box';
@@ -17,9 +18,19 @@ const Categories = () => {
     }
     setOpenDialog(!openDialog);
   }
+
   const handleSearchTerm = (e) => {
     dispatch(setSearchTerm(e.target.value));
   }
+
+  const handleDelete = (idArray) => {
+    if(!Array.isArray(idArray)){
+      idArray = [idArray];
+    }
+    console.log(idArray);
+    dispatch(deleteCategory(idArray));
+  }
+
   return (
     <main>
       <Box>
@@ -32,6 +43,7 @@ const Categories = () => {
       <Box>
         <CategoresList
           handleDialog={handleDialog}
+          handleDelete={handleDelete}
           />
       </Box>
       <CategoryDetails

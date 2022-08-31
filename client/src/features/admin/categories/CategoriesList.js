@@ -85,7 +85,9 @@ const CategoresList = ({handleDialog, handleDelete}) => {
                             <Button color="secondary"
                               onClick={() => handleDialog(true)}
                               >Edit</Button>
-                            <Button variant="outlined" color="error">Delete</Button>
+                            <Button
+                              onClick={() => handleDelete(item.id)}
+                              variant="outlined" color="error">Delete</Button>
                           </ButtonGroup>
                         </TableCell>
                       </TableRow>

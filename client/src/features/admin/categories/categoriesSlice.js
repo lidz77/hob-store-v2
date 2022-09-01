@@ -46,12 +46,17 @@ const categoriesSlice = createSlice({
     categoriesList: [],
     isLoading: true,
     hasError: false,
-    searchTerm: ''
+    searchTerm: '',
+    selectedItems: []
   },
   reducers: {
     setSearchTerm: (state, action) => {
       state.searchTerm = action.payload;
+    },
+    selectItem: (state, action) => {
+      state.selectedItems.includes(action.payload) ? state.selectedItems =  state.selectedItems.filter(item => item !== action.payload) : state.selectedItems.push(action.payload);
     }
+
   },
   extraReducers: {
     [loadCategories.pending]: (state) => {
@@ -72,13 +77,9 @@ const categoriesSlice = createSlice({
       state.hasError = false;
     },
     [addCategory.fulfilled]: (state, action) => {
-      state.newCategoryInfo = action.payload;
+      state.categoriesList.push(action.payload);
       state.isLoading = false;
       state.hasError = false;
-      state.categoriesList.push({
-        ...action.payload,
-          published: false
-      })
     },
     [addCategory.rejected]: (state, action) => {
       state.isLoading = false;
@@ -89,8 +90,7 @@ const categoriesSlice = createSlice({
       state.hasError = false;
     },
     [deleteCategory.fulfilled]: (state, action) => {
-      console.log(action.payload);
-      // state.categoriesList.filter(item => !action.payload.includes(item.id));
+      state.categoriesList = state.categoriesList.filter(item => !action.payload.idArray.includes(item.id));
       state.isLoading = false;
       state.hasError = false;
     },
@@ -102,7 +102,6 @@ const categoriesSlice = createSlice({
 });
 
 
-export const {setSearchTerm} = categoriesSlice.actions;
 
 export const selectSearchTerm = (state) => {
   return state.categories.searchTerm;
@@ -116,5 +115,14 @@ export const selectCategories = (state) => {
 export const selectVisibleCategories = (state) => {
   return state.categories.categoriesList.filter(item => item.title.toLowerCase().includes(state.categories.searchTerm.toLowerCase()));
 }
+
+export const selectedItemsList = (state) => {
+  return state.categories.selectedItems;
+}
+
+export const {
+  setSearchTerm,
+  selectItem
+} = categoriesSlice.actions;
 
 export default categoriesSlice.reducer;

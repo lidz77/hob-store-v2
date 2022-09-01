@@ -1,10 +1,5 @@
 import React, {useEffect} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
-import {
-  loadCategories,
-  selectVisibleCategories,
-  isLoadingCategories,
-} from './categoriesSlice';
+import {useDispatch} from 'react-redux';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import TableContainer from '@mui/material/TableContainer';
@@ -19,15 +14,20 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Checkbox from '@mui/material/Checkbox';
 
-const CategoresList = ({handleDialog, handleDelete}) => {
+const CategoresList = ({
+  handleDialog,
+  handleDelete,
+  filteredCategoriesList,
+  loadCategories,
+  categoriesIsLoading,
+  handleSelectItem
+}) => {
   const dispatch = useDispatch();
-  const categoriesIsLoading = useSelector(isLoadingCategories);
-  const filteredCategoriesList = useSelector(selectVisibleCategories);
   const columns = ['Select', 'ID', 'Title', 'Description', 'Published', 'Actions'];
 
   useEffect(() => {
     dispatch(loadCategories());
-  }, [dispatch])
+  }, [dispatch, loadCategories])
 
   return (
     <Box sx={{ flexGrow : 1}}>
@@ -66,7 +66,9 @@ const CategoresList = ({handleDialog, handleDelete}) => {
                     return (
                       <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                         <TableCell padding="checkbox">
-                          <Checkbox/>
+                          <Checkbox
+                            onChange={()=>handleSelectItem(item.id)}
+                            />
                         </TableCell>
                         <TableCell>
                           {item.id}

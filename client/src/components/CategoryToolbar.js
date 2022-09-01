@@ -49,7 +49,7 @@ const StyleInputBase = styled(InputBase)(({theme}) => ({
 }));
 
 //main function
-const CategoryToolbar = ({handleDialog, searchText, handleSearchTerm}) => {
+const CategoryToolbar = ({handleDialog, searchText, handleSearchTerm, handleDelete, selectedItems}) => {
 
   return (
     <Box>
@@ -70,6 +70,7 @@ const CategoryToolbar = ({handleDialog, searchText, handleSearchTerm}) => {
             size="large"
             aria-label="Delete category"
             color="inherit"
+            onClick={() => handleDelete(selectedItems)}
             >
             <DeleteForeverIcon />
           </IconButton>

@@ -45,7 +45,6 @@ exports.create = (req, res) => {
 //delete
 
 exports.delete = (req, res) => {
-  console.log(req);
   const idArray = req.query.idArray;
   Categories.destroy({
     where:{
@@ -67,4 +66,29 @@ exports.delete = (req, res) => {
       message: `Could not delete id ${idArray} due to ${err}`
     })
   })
+}
+
+//update
+exports.update = (req, res) => {
+  const id = req.query.id;
+  console.log(req);
+  Categories.update(req.body, {
+    where: {
+      id: id
+    }
+  }).then((result) => {
+    if (result == 1) {
+      res.send({
+        message: `Update category id ${id} successfully`
+      })
+    } else {
+      res.send({
+        message: `Cannot update id ${id}. Id not found or req.body is empty`
+      })
+    }
+  }).catch((err) => {
+    res.status(500).send({
+      message: `Error while updating id ${id}. Error: ${err}`
+    })
+  });
 }

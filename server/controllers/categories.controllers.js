@@ -55,7 +55,7 @@ exports.delete = (req, res) => {
     if(result > 0){
       res.send({
         message: `ID ${idArray} delete successfully`,
-        idArray: idArray
+        idArray: idArray.map(Number)
       })
     }else{
       res.send({

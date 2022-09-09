@@ -2,13 +2,17 @@ import React,{useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {
         deleteCategory,
-        selectSearchTerm,
         setSearchTerm,
         selectVisibleCategories,
+        selectedItemsList,
+        selectCategoryDetails,
+        selectSearchTerm,
         loadCategories,
         isLoadingCategories,
         selectItem,
-        selectedItemsList
+        setCategoryDetails,
+        updateCategory,
+        addCategory,
       } from './categoriesSlice';
 import CategoresList from './CategoriesList';
 import Box from '@mui/material/Box';
@@ -21,17 +25,16 @@ const Categories = () => {
   const searchText = useSelector(selectSearchTerm);
   const categoriesIsLoading = useSelector(isLoadingCategories);
   const selectedItems = useSelector(selectedItemsList);
+  const categoryDetails = useSelector(selectCategoryDetails);
   const [openDialog, setOpenDialog] = useState(false);
-  const [info, setInfo] = useState({});
-  const handleDialog = (editMode) => {
-    if(editMode){
-      setInfo({})
-    }
-    setOpenDialog(!openDialog);
+  const [editMode, setEditMode] = useState(false);
+
+  const handleAdd = (data) => {
+    dispatch(addCategory(data));
   }
 
-  const handleSearchTerm = (e) => {
-    dispatch(setSearchTerm(e.target.value));
+  const handleUpdate = (id, data) => {
+    dispatch(updateCategory(id, data))
   }
 
   const handleDelete = (idArray) => {
@@ -41,8 +44,25 @@ const Categories = () => {
     dispatch(deleteCategory(idArray));
   }
 
+  const handleDialog = () => {
+    if(Object.keys(categoryDetails).length === 0){
+      setEditMode(true)
+    }
+    setOpenDialog(!openDialog);
+    openDialog ? handleSetDetails({}) : void(0);
+  }
+
+  const handleSearchTerm = (e) => {
+    dispatch(setSearchTerm(e.target.value));
+  }
+
+
   const handleSelectItem = (item) => {
     dispatch(selectItem(item));
+  }
+
+  const handleSetDetails = (item) => {
+    dispatch(setCategoryDetails(item));
   }
 
   return (
@@ -60,17 +80,21 @@ const Categories = () => {
         <CategoresList
           loadCategories={loadCategories}
           filteredCategoriesList={filteredCategoriesList}
+          categoriesIsLoading={categoriesIsLoading}
           handleDialog={handleDialog}
           handleDelete={handleDelete}
-          categoriesIsLoading={categoriesIsLoading}
           handleSelectItem={handleSelectItem}
+          handleSetDetails={handleSetDetails}
           />
       </Box>
       <CategoryDetails
         open={openDialog}
         handleDialog={handleDialog}
         onSucceed={() => setOpenDialog(false)}
-        info={info}
+        categoryDetails={categoryDetails}
+        handleAdd={handleAdd}
+        handleUpdate={handleUpdate}
+        editMode={editMode}
         />
     </main>
   )

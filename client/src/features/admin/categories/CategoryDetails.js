@@ -1,6 +1,5 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useDispatch} from 'react-redux';
-import {addCategory} from './categoriesSlice';
 import FormControl from '@mui/material/FormControl';
 import FormGroup from '@mui/material/FormGroup';
 import InputLabel from '@mui/material/InputLabel';
@@ -16,23 +15,43 @@ import DialogTitle from '@mui/material/DialogTitle';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
 
-const CategoryDetails = ({open, handleDialog, info}) => {
+const CategoryDetails = ({
+  open,
+  handleDialog,
+  categoryDetails,
+  handleAdd,
+  handleUpdate,
+  editMode
+}) => {
   const dispatch = useDispatch();
-  const [title, setTitle] = useState(info.title);
-  const [description, setDescription] = useState(info.description);
-  const [published, setPublished] = useState(info.published);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [published, setPublished] = useState(false);
+
+  useEffect(() => {
+    setTitle(categoryDetails.title);
+    setDescription(categoryDetails.description);
+    setPublished(categoryDetails.published);
+  }, [categoryDetails,dispatch])
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(addCategory({
+    const details = {
       title: title,
       description: description,
       published: published
-    }))
+    };
+    if(editMode){
+      handleUpdate({id : categoryDetails.id, data :details});
+    }else{
+      handleAdd(details);
+    }
     setTitle('');
     setDescription('');
     setPublished(false);
-    handleDialog();
+    handleDialog(false);
   }
+
   return (
     <Dialog
       open={open}
@@ -44,7 +63,7 @@ const CategoryDetails = ({open, handleDialog, info}) => {
           padding: (theme) => theme.spacing(2),
         }}
         >
-        {info.length === 0 ? 'Edit category' : 'Add new category' }
+        {categoryDetails.length === 0 ? 'Edit category' : 'Add new category' }
         <IconButton
           sx={{
             position: 'absolute',
@@ -57,7 +76,7 @@ const CategoryDetails = ({open, handleDialog, info}) => {
           <CloseIcon />
         </IconButton>
       </DialogTitle>
-        <form id="add-category"
+        <form id="category-details"
           onSubmit={handleSubmit}
           >
         <Box sx={{flexGrow : 1}} />

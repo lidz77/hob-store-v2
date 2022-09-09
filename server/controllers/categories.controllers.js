@@ -70,16 +70,22 @@ exports.delete = (req, res) => {
 
 //update
 exports.update = (req, res) => {
-  const id = req.query.id;
+  const id = req.params.id;
+  const data = req.body.data;
   console.log(req);
-  Categories.update(req.body, {
+
+  Categories.update(data, {
     where: {
       id: id
     }
   }).then((result) => {
     if (result == 1) {
       res.send({
-        message: `Update category id ${id} successfully`
+        message: `Update category id ${id} successfully`,
+        data: {
+          ...data,
+          id: id
+        }
       })
     } else {
       res.send({

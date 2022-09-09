@@ -17,10 +17,11 @@ import Checkbox from '@mui/material/Checkbox';
 const CategoresList = ({
   handleDialog,
   handleDelete,
+  handleSelectItem,
+  handleSetDetails,
   filteredCategoriesList,
   loadCategories,
   categoriesIsLoading,
-  handleSelectItem
 }) => {
   const dispatch = useDispatch();
   const columns = ['Select', 'ID', 'Title', 'Description', 'Published', 'Actions'];
@@ -85,7 +86,10 @@ const CategoresList = ({
                         <TableCell>
                           <ButtonGroup>
                             <Button color="secondary"
-                              onClick={() => handleDialog(true)}
+                              onClick={() => {
+                                handleSetDetails(item);
+                                handleDialog();
+                              }}
                               >Edit</Button>
                             <Button
                               onClick={() => handleDelete(item.id)}

@@ -49,7 +49,7 @@ const StyleInputBase = styled(InputBase)(({theme}) => ({
 }));
 
 //main function
-const CategoryToolbar = ({handleDialog, searchText, handleSearchTerm, handleDelete, selectedItems}) => {
+const CategoryToolbar = ({handleDialog, searchText, handleSearchTerm, handleDelete, selectedItems,}) => {
 
   return (
     <Box>
@@ -60,7 +60,7 @@ const CategoryToolbar = ({handleDialog, searchText, handleSearchTerm, handleDele
             size="large"
             aria-label="Add new category"
             color="inherit"
-            onClick={handleDialog}
+            onClick={() => handleDialog()}
             >
             <PostAddIcon />
           </IconButton>
@@ -80,7 +80,7 @@ const CategoryToolbar = ({handleDialog, searchText, handleSearchTerm, handleDele
             <SearchIcon />
           </SearchIconWrapper>
           <StyleInputBase
-            placeholder="Search..."
+            placeholder="Title..."
             inputProps={{ 'aria-label': 'search'}}
             value={searchText}
             onChange={handleSearchTerm}

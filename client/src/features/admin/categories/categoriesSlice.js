@@ -39,10 +39,24 @@ export const deleteCategory = createAsyncThunk(
   }
 )
 
+
+export const updateCategory = createAsyncThunk(
+  'categories/updateCategory',
+  async ({id, data}) => {
+    const res = await CategoriesDataService.update(id, data).then((result) => {
+      console.log(result);
+      return result.data;
+    }).catch((err) => {
+      console.log(err);
+    });
+    return res;
+  }
+)
+
 const categoriesSlice = createSlice({
   name: 'categories',
   initialState: {
-    newCategoryInfo: {},
+    categoryDetails: {},
     categoriesList: [],
     isLoading: true,
     hasError: false,
@@ -55,6 +69,9 @@ const categoriesSlice = createSlice({
     },
     selectItem: (state, action) => {
       state.selectedItems.includes(action.payload) ? state.selectedItems =  state.selectedItems.filter(item => item !== action.payload) : state.selectedItems.push(action.payload);
+    },
+    setCategoryDetails: (state, action) => {
+      state.categoryDetails = action.payload;
     }
 
   },
@@ -101,6 +118,24 @@ const categoriesSlice = createSlice({
       state.isLoading = false;
       state.hasError = true;
     },
+    [updateCategory.pending]: (state, action) => {
+      state.isLoading = true;
+      state.hasError = false;
+    },
+    [updateCategory.fulfilled]: (state, action) => {
+      const res = action.payload.data;
+      state.categoriesList = state.categoriesList.map(item =>
+        {
+          return item.id === parseInt(res.id) ? item = res : item;
+        }
+      );
+      state.isLoading = false;
+      state.hasError = false;
+    },
+    [updateCategory.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.hasError = true;
+    },
   }
 });
 
@@ -118,6 +153,9 @@ export const selectCategories = (state) => {
 export const selectVisibleCategories = (state) => {
   return state.categories.categoriesList.filter(item => item.title.toLowerCase().includes(state.categories.searchTerm.toLowerCase()));
 }
+export const selectCategoryDetails = (state) => {
+  return state.categories.categoryDetails;
+}
 
 export const selectedItemsList = (state) => {
   return state.categories.selectedItems;
@@ -125,7 +163,8 @@ export const selectedItemsList = (state) => {
 
 export const {
   setSearchTerm,
-  selectItem
+  selectItem,
+  setCategoryDetails
 } = categoriesSlice.actions;
 
 export default categoriesSlice.reducer;

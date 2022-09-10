@@ -21,7 +21,7 @@ const CategoryDetails = ({
   categoryDetails,
   handleAdd,
   handleUpdate,
-  editMode
+  editMode,
 }) => {
   const dispatch = useDispatch();
   const [title, setTitle] = useState('');
@@ -32,7 +32,7 @@ const CategoryDetails = ({
     setTitle(categoryDetails.title);
     setDescription(categoryDetails.description);
     setPublished(categoryDetails.published);
-  }, [categoryDetails,dispatch])
+  }, [categoryDetails, dispatch])
 
   const handleSubmit = (e) => {
     e.preventDefault();

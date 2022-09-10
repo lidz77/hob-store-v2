@@ -124,9 +124,10 @@ const categoriesSlice = createSlice({
     },
     [updateCategory.fulfilled]: (state, action) => {
       const res = action.payload.data;
+      console.log(res);
       state.categoriesList = state.categoriesList.map(item =>
         {
-          return item.id === parseInt(res.id) ? item = res : item;
+          return item.id === res.id ? item = res : item;
         }
       );
       state.isLoading = false;

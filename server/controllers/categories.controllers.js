@@ -84,7 +84,7 @@ exports.update = (req, res) => {
         message: `Update category id ${id} successfully`,
         data: {
           ...data,
-          id: id
+          id: parseInt(id)
         }
       })
     } else {

@@ -22,6 +22,7 @@ const CategoresList = ({
   filteredCategoriesList,
   loadCategories,
   categoriesIsLoading,
+  setEditMode
 }) => {
   const dispatch = useDispatch();
   const columns = ['Select', 'ID', 'Title', 'Description', 'Published', 'Actions'];
@@ -88,6 +89,7 @@ const CategoresList = ({
                             <Button color="secondary"
                               onClick={() => {
                                 handleSetDetails(item);
+                                setEditMode(true);
                                 handleDialog();
                               }}
                               >Edit</Button>

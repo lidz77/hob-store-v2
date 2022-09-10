@@ -45,11 +45,13 @@ const Categories = () => {
   }
 
   const handleDialog = () => {
-    if(Object.keys(categoryDetails).length === 0){
-      setEditMode(true)
-    }
+    // if(Object.keys(categoryDetails).length === 0){
+    //   console.log('adda')
+    // }else{
+    //   console.log('edit')
+    // }
+    // openDialog ? handleSetDetails({}) : void(0);
     setOpenDialog(!openDialog);
-    openDialog ? handleSetDetails({}) : void(0);
   }
 
   const handleSearchTerm = (e) => {
@@ -74,6 +76,7 @@ const Categories = () => {
           handleDialog={handleDialog}
           handleDelete={handleDelete}
           selectedItems={selectedItems}
+          setEditMode={setEditMode}
           />
       </Box>
       <Box>
@@ -85,9 +88,11 @@ const Categories = () => {
           handleDelete={handleDelete}
           handleSelectItem={handleSelectItem}
           handleSetDetails={handleSetDetails}
+          setEditMode={setEditMode}
           />
       </Box>
       <CategoryDetails
+        loadCategories={loadCategories}
         open={openDialog}
         handleDialog={handleDialog}
         onSucceed={() => setOpenDialog(false)}

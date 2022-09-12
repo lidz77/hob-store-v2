@@ -16,7 +16,10 @@ app.use(express.urlencoded({
 
 //declaire db models
 const db = require('./models');
-db.sequelize.sync();
+//useRoutes has to be us after db synced
+db.sequelize.sync().then(() => {
+  useRoutes();
+});
 
 
 //test connection
@@ -27,7 +30,11 @@ app.get('/', (req, res) => {
 });
 
 //routes
-require('./routes/categories.routes')(app);
+function useRoutes() {
+  console.log('use routes');
+  require('./routes/categories.routes')(app);
+  require('./routes/products/dimensions.routes')(app);
+}
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

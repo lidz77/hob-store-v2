@@ -21,4 +21,6 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 db.categories = require('./categories.model')(sequelize, Sequelize);
+db.products = require('./products/products.model')(sequelize, Sequelize);
+db.dimensions = require('./products/dimensions.model')(sequelize, Sequelize)
 module.exports = db;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Toolbar from '@mui/material/Toolbar';
 import Box from '@mui/material/Box';
 import SearchIcon from '@mui/icons-material/Search';
@@ -11,16 +12,7 @@ import {
   StyleInputBase
 } from '../styles/Toolbar';
 
-//main function
-const CategoryToolbar = ({
-  handleDialog,
-  searchText,
-  handleSearchTerm,
-  handleDelete,
-  selectedItems,
-  setEditMode,
-}) => {
-
+const ProductToolbar = (props) => {
   return (
     <Box>
       <Toolbar position="static">
@@ -30,11 +22,6 @@ const CategoryToolbar = ({
             size="large"
             aria-label="Add new category"
             color="inherit"
-            onClick={
-              () => {
-                handleDialog();
-                setEditMode(false);
-              }}
             >
             <PostAddIcon />
           </IconButton>
@@ -44,8 +31,6 @@ const CategoryToolbar = ({
             size="large"
             aria-label="Delete category"
             color="inherit"
-            onClick={() => handleDelete(selectedItems)}
-            disabled={selectedItems.length === 0 ? true : false}
             >
             <DeleteForeverIcon />
           </IconButton>
@@ -57,13 +42,14 @@ const CategoryToolbar = ({
           <StyleInputBase
             placeholder="Title..."
             inputProps={{ 'aria-label': 'search'}}
-            value={searchText}
-            onChange={handleSearchTerm}
             />
         </Search>
       </Toolbar>
     </Box>
   )
 }
+ProductToolbar.propTypes = {
 
-export default CategoryToolbar
+}
+
+export default ProductToolbar

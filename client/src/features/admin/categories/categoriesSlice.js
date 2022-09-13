@@ -108,9 +108,7 @@ const categoriesSlice = createSlice({
     },
     [deleteCategory.fulfilled]: (state, action) => {
       // loadCategories();
-      console.log(action.payload.idArray);
       state.categoriesList = state.categoriesList.filter(item => !action.payload.idArray.includes(item.id));
-      console.log(state.categoriesList);
       state.isLoading = false;
       state.hasError = false;
     },

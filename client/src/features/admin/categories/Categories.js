@@ -45,12 +45,6 @@ const Categories = () => {
   }
 
   const handleDialog = () => {
-    // if(Object.keys(categoryDetails).length === 0){
-    //   console.log('adda')
-    // }else{
-    //   console.log('edit')
-    // }
-    // openDialog ? handleSetDetails({}) : void(0);
     setOpenDialog(!openDialog);
   }
 
@@ -92,7 +86,6 @@ const Categories = () => {
           />
       </Box>
       <CategoryDetails
-        loadCategories={loadCategories}
         open={openDialog}
         handleDialog={handleDialog}
         onSucceed={() => setOpenDialog(false)}

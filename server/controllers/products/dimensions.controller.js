@@ -1,6 +1,6 @@
 const db = require('../../models')
 const Dimensions = db.dimensions;
-
+const Products = db.products;
 
 exports.create = (req, res) => {
   const name = req.body.name;

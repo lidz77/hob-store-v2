@@ -5,7 +5,7 @@ module.exports = (app) => {
   dimensionsRouter.post('/', dimensionsController.create);
   dimensionsRouter.get('/', dimensionsController.findAll);
   dimensionsRouter.delete('/:id', dimensionsController.delete);
-  dimensionsRouter.put('/:id',dimensionsController.update)
+  dimensionsRouter.put('/:id',dimensionsController.update);
 
   app.use('/api/products/dimensions/', dimensionsRouter);
 };

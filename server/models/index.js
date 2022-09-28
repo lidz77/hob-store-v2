@@ -22,5 +22,18 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 db.categories = require('./categories.model')(sequelize, Sequelize);
 db.products = require('./products/products.model')(sequelize, Sequelize);
-db.dimensions = require('./products/dimensions.model')(sequelize, Sequelize)
+db.dimensions = require('./products/dimensions.model')(sequelize, Sequelize);
+//relationship
+db.products.belongsToMany(db.dimensions, {
+  through: 'product_dimension',
+  as: 'dimension',
+  foreignKey: 'product_id'
+});
+db.dimensions.belongsToMany(db.products, {
+  through: 'product_dimension',
+  as: 'product',
+  foreignKey: 'dimension_id'
+});
+
+
 module.exports = db;

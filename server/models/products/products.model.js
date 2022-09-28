@@ -10,9 +10,6 @@ module.exports= (sequelize, Sequelize) => {
       type: Sequelize.BOOLEAN
     },
     // data type of ref details table should be converted b4 res
-    size: {
-      type: Sequelize.STRING
-    },
     number_of_hobs: {
       type: Sequelize.STRING
     },

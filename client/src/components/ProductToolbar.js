@@ -1,4 +1,5 @@
 import React from 'react';
+import {useDispatch} from 'react-redux';
 import PropTypes from 'prop-types';
 import Toolbar from '@mui/material/Toolbar';
 import Box from '@mui/material/Box';
@@ -13,8 +14,14 @@ import {
 } from '../styles/Toolbar';
 
 const ProductToolbar = ({
-  handleDialog
+  handleDialog,
+  setSearchTerm
 }) => {
+  const dispatch = useDispatch();
+  const handleSetSearchTerm = (e) => {
+    dispatch(setSearchTerm(e.target.value));
+  }
+
   return (
     <Box>
       <Toolbar position="static">
@@ -45,6 +52,7 @@ const ProductToolbar = ({
           <StyleInputBase
             placeholder="Title..."
             inputProps={{ 'aria-label': 'search'}}
+            onChange={handleSetSearchTerm}
             />
         </Search>
       </Toolbar>

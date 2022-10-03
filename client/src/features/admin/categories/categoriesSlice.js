@@ -73,7 +73,6 @@ const categoriesSlice = createSlice({
     setCategoryDetails: (state, action) => {
       state.categoryDetails = action.payload;
     }
-
   },
   extraReducers: {
     [loadCategories.pending]: (state) => {

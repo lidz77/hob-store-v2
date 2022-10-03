@@ -14,6 +14,18 @@ export const loadProducts = createAsyncThunk(
   }
 )
 
+export const createProduct = createAsyncThunk(
+  'products/addProduct',
+  async (newProductInfo) => {
+    const res = await ProductsDataService.create(newProductInfo).then((result) => {
+      return result.data;
+    }).catch((err) => {
+      console.log(err);
+    });
+    return res;
+  }
+)
+
 const productsSlice = createSlice({
   name: 'products',
   initialState: {
@@ -23,6 +35,9 @@ const productsSlice = createSlice({
     searchTerm: ''
   },
   reducers: {
+    setSearchTerm: (state, action) => {
+      state.searchTerm = action.payload;
+    }
   },
   extraReducers: {
     [loadProducts.pending]: (state, action) => {
@@ -38,6 +53,19 @@ const productsSlice = createSlice({
       state.isLoading = false;
       state.hasError = true;
     },
+    [createProduct.pending]: (state, action) => {
+      state.isLoading = true;
+      state.hasError = false;
+    },
+    [createProduct.fulfilled]: (state, action) => {
+      state.productsList.push(action.payload);
+      state.isLoading = false;
+      state.hasError = false;
+    },
+    [createProduct.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.hasError = true;
+    },
   },
 });
 
@@ -47,8 +75,16 @@ export const selectVisibleProducts = (state) => {
   );
 }
 
+export const selectSearchTerm = (state) => {
+  return state.products.searchTerm;
+}
+
 export const isLoadingProducts = (state) => {
   return state.products.isLoading;
 }
+
+export const {
+  setSearchTerm
+} = productsSlice.actions;
 
 export default productsSlice.reducer;

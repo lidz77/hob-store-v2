@@ -12,7 +12,9 @@ import {
 import {
   loadProducts,
   isLoadingProducts,
-  selectVisibleProducts
+  selectVisibleProducts,
+  createProduct,
+  setSearchTerm
 } from './productsSlice'
 
 const Products = () => {
@@ -20,6 +22,7 @@ const Products = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const productsIsLoading = useSelector(isLoadingProducts);
   const filteredProductsList = useSelector(selectVisibleProducts);
+
   const handleDialog = () => {
     setOpenDialog(!openDialog);
   }
@@ -28,8 +31,10 @@ const Products = () => {
     <main>
       <ProductToolbar
         handleDialog={handleDialog}
+        setSearchTerm={setSearchTerm}
         />
       <ProductDetails
+        createProduct={createProduct}
         openDialog={openDialog}
         loadDimensions={loadDimensions}
         dimensionsList={dimensionsList}

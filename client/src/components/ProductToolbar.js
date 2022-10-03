@@ -9,10 +9,12 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import {
   Search,
   SearchIconWrapper,
-  StyleInputBase
+  StyleInputBase,
 } from '../styles/Toolbar';
 
-const ProductToolbar = (props) => {
+const ProductToolbar = ({
+  handleDialog
+}) => {
   return (
     <Box>
       <Toolbar position="static">
@@ -22,6 +24,7 @@ const ProductToolbar = (props) => {
             size="large"
             aria-label="Add new category"
             color="inherit"
+            onClick={()=> handleDialog()}
             >
             <PostAddIcon />
           </IconButton>

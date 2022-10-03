@@ -4,6 +4,7 @@ const Dimensions = db.dimensions;
 
 exports.create = (req, res) => {
   const title = req.body.title;
+  const dimensionId = req.body.dimensionId;
   console.log(req);
   if(!title){
     res.status(400).send({
@@ -13,7 +14,39 @@ exports.create = (req, res) => {
   }
 
   Products.create(req.body).then((result) => {
-    res.send(result);
+    Products.findByPk(result.id).then((product) => {
+      if(!product){
+        console.log('Product not found');
+        res.send({
+          message: `Product not found`,
+          data: null
+        })
+      }
+      return Dimensions.findByPk(dimensionId).then((dimension) => {
+        if(!dimension){
+          console.log(`Dimension ${dimensionId} not found`);
+          res.send({
+            message: `Dimension ${dimensionId} not found`,
+            data: null
+          })
+        }
+        product.addDimension(dimension);
+        console.log(`Dimension ${dimension.id} added to product ${product.id}`)
+      });
+    });
+    res.send({
+      result,
+      include: [
+        {
+          model: Dimensions,
+          as: 'dimension',
+          attributes: ['name'],
+          through: {
+            attributes: []
+          }
+        }
+      ]
+    });
   }).catch((err) => {
     res.status(500).send({
       message: err.message || 'Error while creating new product'
@@ -23,7 +56,17 @@ exports.create = (req, res) => {
 
 exports.findAll = (req, res) => {
   Products.findAll({
-    where: null
+    where: null,
+    include: [
+      {
+        model: Dimensions,
+        as: 'dimension',
+        attributes: ['name'],
+        through: {
+          attributes: []
+        }
+      }
+    ]
   }).then((result) => {
     console.log(result);
     res.send(result);
@@ -86,9 +129,9 @@ exports.addDimension = (req, res) => {
       })
     });
   }).catch((err) => {
-    console.log('error while adding tutorial to tag:', err)
+    console.log('error while creating product', err)
     res.status(500).send({
-      message: 'error while adding tutorial to tag:',
+      message: 'error while creating product',
       err: err
     })
   });

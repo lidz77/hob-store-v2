@@ -13,17 +13,8 @@ module.exports= (sequelize, Sequelize) => {
     number_of_hobs: {
       type: Sequelize.STRING
     },
-    images_ids: {
-      type: Sequelize.STRING
-    },
-    material: {
-      type: Sequelize.STRING
-    },
-    brand: {
-      type: Sequelize.STRING
-    },
-    color: {
-      type: Sequelize.STRING
+    price: {
+      type: Sequelize.INTEGER
     }
   })
   return Products;

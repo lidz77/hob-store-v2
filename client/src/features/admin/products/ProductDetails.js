@@ -20,11 +20,13 @@ const ProductDetails = ({
   loadDimensions,
   dimensionsList,
   deleteDimension,
-  addDimension
+  addDimension,
+  openDialog,
+  handleDialog
 }) => {
   return (
     <Dialog
-      open={true}
+      open={openDialog}
       >
       <DialogTitle
         sx={{
@@ -41,6 +43,7 @@ const ProductDetails = ({
             top: 8,
             color: (theme) => theme.palette.grey[500]
           }}
+          onClick={()=> handleDialog()}
           >
           <CloseIcon />
         </IconButton>
@@ -84,6 +87,7 @@ const ProductDetails = ({
                 type="submit"
                 icon={<DoneIcon />} />
               <BottomNavigationAction
+                onClick={()=>handleDialog()}
                 label="Cancel" icon={<CloseIcon />} />
             </BottomNavigation>
         </FormControl>

@@ -17,15 +17,13 @@ app.use(express.urlencoded({
 //declaire db models
 const db = require('./models');
 // useRoutes has to be us after db synced
-db.sequelize.sync().then(() => {
+
+db.sequelize.sync(
+  // drop existing table an resync db
+  // { force: true }
+).then(() => {
   useRoutes();
 });
-
-// drop existing table an resync db
-// db.sequelize.sync({ force: true }).then(() => {
-//   console.log("Drop and re-sync db.");
-//   useRoutes();
-// });
 
 //test connection
 app.get('/', (req, res) => {

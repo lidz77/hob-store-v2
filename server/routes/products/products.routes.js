@@ -8,5 +8,6 @@ module.exports = (app) => {
   productsRouter.delete('/:id', productsController.delete);
   productsRouter.put('/:id',productsController.update);
   productsRouter.post('/add', productsController.addDimension);
+  productsRouter.post('/:id', productsController.findById)
   app.use('/api/products/', productsRouter);
 };

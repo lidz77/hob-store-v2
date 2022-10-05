@@ -5,48 +5,39 @@ const Dimensions = db.dimensions;
 exports.create = (req, res) => {
   const title = req.body.title;
   const dimensionId = req.body.dimensionId;
-  console.log(req);
   if(!title){
     res.status(400).send({
       message: "Title must be required"
     });
     return;
   }
-
   Products.create(req.body).then((result) => {
-    Products.findByPk(result.id).then((product) => {
-      if(!product){
-        console.log('Product not found');
-        res.send({
-          message: `Product not found`,
-          data: null
-        })
+    const productId = result.id;
+    console.log(dimensionId)
+    Products.findByPk(productId).then((product) => {
+      if (!isNaN(dimensionId)) {
+        Dimensions.findByPk(dimensionId).then((dimensionResult) => {
+          product.addDimension(dimensionResult);
+          console.log(`Add product to dimension success`)
+        });
+        console.log('dud ma ad')
       }
-      return Dimensions.findByPk(dimensionId).then((dimension) => {
-        if(!dimension){
-          console.log(`Dimension ${dimensionId} not found`);
-          res.send({
-            message: `Dimension ${dimensionId} not found`,
-            data: null
-          })
+      Products.findByPk(productId, {
+        include: [
+      {
+        model: Dimensions,
+        as: 'dimension',
+        attributes: ['name'],
+        through: {
+          attributes: []
         }
-        product.addDimension(dimension);
-        console.log(`Dimension ${dimension.id} added to product ${product.id}`)
+      }
+    ]
+      }).then((result) => {
+        console.log('concac ')
+        res.send(result);
       });
-    });
-    res.send({
-      result,
-      include: [
-        {
-          model: Dimensions,
-          as: 'dimension',
-          attributes: ['name'],
-          through: {
-            attributes: []
-          }
-        }
-      ]
-    });
+    })
   }).catch((err) => {
     res.status(500).send({
       message: err.message || 'Error while creating new product'
@@ -68,7 +59,6 @@ exports.findAll = (req, res) => {
       }
     ]
   }).then((result) => {
-    console.log(result);
     res.send(result);
   }).catch((err) => {
     res.status(500).send({
@@ -101,7 +91,6 @@ exports.findById = (req, res) => {
 exports.addDimension = (req, res) => {
   const productId = req.body.productId;
   const dimensionId = req.body.dimensionId;
-  console.log(req);
   Products.findByPk(productId).then((product) => {
     if(!product){
       console.log('Product not found');
@@ -163,7 +152,6 @@ exports.delete = (req, res) => {
 }
 
 exports.update = (req, res) => {
-  console.log(req);
   const id = req.params.id;
   const data = req.body;
 

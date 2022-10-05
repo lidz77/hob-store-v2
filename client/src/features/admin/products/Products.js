@@ -1,4 +1,5 @@
 import React,{useState} from 'react';
+import {useDispatch} from 'react-redux';
 import {useSelector} from 'react-redux';
 import ProductToolbar from '../../../components/ProductToolbar';
 import ProductDetails from './ProductDetails';
@@ -14,10 +15,11 @@ import {
   isLoadingProducts,
   selectVisibleProducts,
   createProduct,
-  setSearchTerm
+  setSearchTerm,
 } from './productsSlice'
 
 const Products = () => {
+  const dispatch = useDispatch();
   const dimensionsList = useSelector(selectDimensions);
   const [openDialog, setOpenDialog] = useState(false);
   const productsIsLoading = useSelector(isLoadingProducts);
@@ -27,6 +29,10 @@ const Products = () => {
     setOpenDialog(!openDialog);
   }
 
+  const handleAddProduct = (newProductInfo) => {
+    dispatch(createProduct(newProductInfo));
+  }
+
   return (
     <main>
       <ProductToolbar
@@ -34,13 +40,13 @@ const Products = () => {
         setSearchTerm={setSearchTerm}
         />
       <ProductDetails
-        createProduct={createProduct}
         openDialog={openDialog}
         loadDimensions={loadDimensions}
         dimensionsList={dimensionsList}
         deleteDimension={deleteDimension}
         addDimension={addDimension}
         handleDialog={handleDialog}
+        handleAddProduct={handleAddProduct}
         />
       <ProductsList
         productsIsLoading={productsIsLoading}

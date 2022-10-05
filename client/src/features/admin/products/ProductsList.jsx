@@ -76,7 +76,7 @@ const ProductsList = ({
                           {item.title}
                         </TableCell>
                         <TableCell>
-                          {item.dimension[0].name }
+                          {item.dimension.length ? item.dimension[0].name : '' }
                         </TableCell>
                         <TableCell>
                           {item.brand}

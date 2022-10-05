@@ -37,7 +37,8 @@ const Dimensions = ({
   loadDimensions,
   dimensionsList,
   deleteDimension,
-  addDimension
+  addDimension,
+  handlePickDimension
 }) => {
   const theme = useTheme();
   const [dimension, setDimension] = useState('');
@@ -88,7 +89,7 @@ const Dimensions = ({
            <MenuItem
              key={item.id}
              value={item.name || ''}
-             style={getStyles(item.name, dimension, theme)}
+             onClick={() => handlePickDimension(item.id)}
            >
              {item.name}
              <Box sx={{display: {xs: 'none', md: 'flex', }}}>

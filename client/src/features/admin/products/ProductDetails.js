@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState} from 'react';
+import {useDispatch} from 'react-redux';
 import PropTypes from 'prop-types';
 import FormControl from '@mui/material/FormControl';
 import FormGroup from '@mui/material/FormGroup';
@@ -16,14 +17,43 @@ import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
 import Dimensions from './Dimensions'
 
+import {addProduct} from './productsSlice'
+
 const ProductDetails = ({
   loadDimensions,
   dimensionsList,
   deleteDimension,
   addDimension,
   openDialog,
-  handleDialog
+  handleDialog,
+  handleAddProduct
 }) => {
+  const dispatch = useDispatch();
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [published, setPublished] = useState(false);
+  const [dimensionId, setDimensionId] = useState({});
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // dispatch(addProduct({
+    //   dimensionId: dimensionId,
+    //   title: title,
+    //   description: description,
+    //   published: published
+    // }))
+    handleAddProduct({
+      dimensionId: dimensionId,
+      title: title,
+      description: description,
+      published: published
+    });
+  }
+
+  const handlePickDimension = (id) => {
+    setDimensionId(id);
+  }
+
   return (
     <Dialog
       open={openDialog}
@@ -49,6 +79,7 @@ const ProductDetails = ({
         </IconButton>
       </DialogTitle>
       <form id="product-details"
+        onSubmit={handleSubmit}
         >
         <Box sx={{flexGrow : 1}} />
         <FormGroup>
@@ -58,6 +89,8 @@ const ProductDetails = ({
             id="product-name"
             aria-describedby="my-helper-text"
             required
+            value={title}
+            onChange={(e)=>setTitle(e.target.value)}
             />
         </FormControl>
         <Box sx={{flexGrow : 5}} />
@@ -66,11 +99,15 @@ const ProductDetails = ({
             <Input
               id="product-description"
               aria-describedby="my-helper-text"
+              value={description}
+              onChange={(e)=>setDescription(e.target.value)}
               />
         </FormControl>
           <FormControlLabel
             control={
               <Switch
+                checked={published || false}
+                onChange={()=>setPublished(!published)}
                 />} label="Publised"
             />
           <Dimensions
@@ -78,6 +115,8 @@ const ProductDetails = ({
             dimensionsList={dimensionsList}
             deleteDimension={deleteDimension}
             addDimension={addDimension}
+            handlePickDimension = {handlePickDimension}
+            setDimensionId={setDimensionId}
             />
         <FormControl>
             <BottomNavigation

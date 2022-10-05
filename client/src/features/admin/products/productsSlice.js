@@ -26,6 +26,19 @@ export const createProduct = createAsyncThunk(
   }
 )
 
+export const findProduct = createAsyncThunk(
+  'products/findProduct',
+  async (id) => {
+    const res = await ProductsDataService.findById(id).then((result) => {
+      console.log(result);
+      return result;
+    }).catch((err) => {
+      console.log(err);
+    });
+    return res;
+  }
+)
+
 const productsSlice = createSlice({
   name: 'products',
   initialState: {
@@ -58,11 +71,25 @@ const productsSlice = createSlice({
       state.hasError = false;
     },
     [createProduct.fulfilled]: (state, action) => {
-      state.productsList.push(action.payload);
+      state.productsList.push(action.payload)
       state.isLoading = false;
       state.hasError = false;
     },
     [createProduct.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.hasError = true;
+    },
+    [findProduct.pending]: (state, action) => {
+      state.isLoading = true;
+      state.hasError = false;
+    },
+    [findProduct.fulfilled]: (state, action) => {
+      // console.log(action.payload);
+      state.productsList.push(action.payload)
+      state.isLoading = false;
+      state.hasError = false;
+    },
+    [findProduct.rejected]: (state, action) => {
       state.isLoading = false;
       state.hasError = true;
     },

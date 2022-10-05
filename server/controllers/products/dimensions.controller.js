@@ -27,7 +27,6 @@ exports.findAll = (req, res) => {
   Dimensions.findAll({
     where: null
   }).then((result) => {
-    console.log(result);
     res.send(result);
   }).catch((err) => {
     res.status(500).send({

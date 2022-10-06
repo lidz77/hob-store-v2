@@ -24,44 +24,45 @@ const MenuProps = {
   },
 };
 
-function getStyles(name, dimension, theme) {
+function getStyles(name, prop, theme) {
   return {
     fontWeight:
-      dimension.indexOf(name) === -1
+      prop.indexOf(name) === -1
         ? theme.typography.fontWeightRegular
         : theme.typography.fontWeightMedium,
   };
 }
 
-const Dimensions = ({
-  loadDimensions,
-  dimensionsList,
-  deleteDimension,
-  addDimension,
-  handlePickDimension
+const ProductProperties = ({
+  loadingList,
+  propsList,
+  deleteProp,
+  addProp,
+  handlePickProp,
+  propName
 }) => {
   const theme = useTheme();
-  const [dimension, setDimension] = useState('');
-  const [newDimension, setNewDimension] = useState('');
+  const [prop, setProp] = useState('');
+  const [newProp, setNewProp] = useState('');
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(loadDimensions());
-  }, [dispatch, loadDimensions]);
+    dispatch(loadingList(propName));
+  }, [dispatch, loadingList]);
 
   const handleDelete = (id) => {
-    dispatch(deleteDimension(id));
+    dispatch(deleteProp(id));
   }
 
   const handleChange = (e) => {
-    setDimension(e.target.value);
+    setProp(e.target.value);
   };
 
   const handleAdd = () => {
-    dispatch(addDimension({
-      name: newDimension
+    dispatch(addProp({
+      name: newProp
     }));
-    setNewDimension('');
+    setNewProp('');
   }
 
   return (
@@ -69,12 +70,12 @@ const Dimensions = ({
      <FormControl sx={{ m: 1, width: 300, mt: 3 }}>
        <Select
          displayEmpty
-         value={dimension}
+         value={prop}
          onChange={handleChange}
          input={<OutlinedInput />}
          renderValue={(selected) => {
            if (selected.length === 0) {
-             return <em>Select dimension</em>;
+             return <em>Select {propName}</em>;
            }
 
            return selected
@@ -83,19 +84,19 @@ const Dimensions = ({
          inputProps={{ 'aria-label': 'Without label' }}
        >
          <MenuItem disabled value="">
-           <em>Select dimension</em>
+           <em>Select {propName}</em>
          </MenuItem>
-         {dimensionsList.map((item) => (
+         {propsList.map((item) => (
            <MenuItem
-             key={item.id}
+             key={item.id+propName}
              value={item.name || ''}
-             onClick={() => handlePickDimension(item.id)}
+             onClick={() => handlePickProp(item.id)}
            >
              {item.name}
              <Box sx={{display: {xs: 'none', md: 'flex', }}}>
                <IconButton
                  size="large"
-                 aria-label="Add new category"
+                 aria-label={"Add new" + propName}
                  color="inherit"
                  onClick={(e)=>{
                    e.preventDefault();
@@ -108,19 +109,19 @@ const Dimensions = ({
            </MenuItem>
          ))}
          <MenuItem
-           key='new'
+           key={'new'+{propName}}
            >
            <TextField
              id="standard-basic"
-             label="New dimension"
+             label={"New " + propName}
              variant="standard"
-             value={newDimension}
-             onChange={(e) => setNewDimension(e.target.value)}
+             value={newProp}
+             onChange={(e) => setNewProp(e.target.value)}
              />
            <Box sx={{display: {xs: 'none', md: 'flex'}}}>
              <IconButton
                size="large"
-               aria-label="Add new category"
+               aria-label={"Add new" + propName}
                color="inherit"
                onClick={()=>handleAdd()}
                >
@@ -130,9 +131,9 @@ const Dimensions = ({
            <Box sx={{display: {xs: 'none', md: 'flex'}}}>
              <IconButton
                size="large"
-               aria-label="Add new category"
+               aria-label={"Add new" + propName}
                color="inherit"
-               onClick={()=> setNewDimension('')}
+               onClick={()=> setNewProp('')}
                >
                <Close />
              </IconButton>
@@ -143,11 +144,13 @@ const Dimensions = ({
    </div>
   )
 }
-Dimensions.propTypes = {
-  loadDimensions: PropTypes.func,
-  dimensionsList: PropTypes.array,
-  deleteDimension: PropTypes.func,
-  addDimension: PropTypes.func,
+ProductProperties.propTypes = {
+  loadingList: PropTypes.func,
+  propsList: PropTypes.array,
+  deleteProp: PropTypes.func,
+  addProp: PropTypes.func,
+  handlePickProp: PropTypes.func,
+  propName: PropTypes.string
 }
 
-export default Dimensions
+export default ProductProperties

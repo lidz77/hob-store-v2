@@ -15,7 +15,7 @@ import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import DialogTitle from '@mui/material/DialogTitle';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
-import Dimensions from './Dimensions'
+import ProductProperties from '../../../components/ProductProperties'
 
 import {addProduct} from './productsSlice'
 
@@ -24,6 +24,14 @@ const ProductDetails = ({
   dimensionsList,
   deleteDimension,
   addDimension,
+  loadBrands,
+  brandsList,
+  deleteBrand,
+  addBrand,
+  loadMaterials,
+  materialsList,
+  deleteMaterial,
+  addMaterial,
   openDialog,
   handleDialog,
   handleAddProduct
@@ -31,27 +39,38 @@ const ProductDetails = ({
   const dispatch = useDispatch();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [published, setPublished] = useState(false);
-  const [dimensionId, setDimensionId] = useState({});
+  const [available, setAvailable] = useState(false);
+  const [dimensionId, setDimensionId] = useState(null);
+  const [brandId, setBrandId] = useState(null);
+  const [materialId, setMaterialId] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // dispatch(addProduct({
-    //   dimensionId: dimensionId,
-    //   title: title,
-    //   description: description,
-    //   published: published
-    // }))
     handleAddProduct({
       dimensionId: dimensionId,
       title: title,
       description: description,
-      published: published
+      available: available,
+      brandId: brandId,
+      materialId: materialId
     });
+    setTitle('');
+    setDescription('');
+    setAvailable(false);
+    setDimensionId(null);
+    setBrandId(null);
+    setMaterialId(null);
+    handleDialog(false);
   }
 
   const handlePickDimension = (id) => {
     setDimensionId(id);
+  }
+  const handlePickBrand = (id) => {
+    setBrandId(id);
+  }
+  const handlePickMaterial = (id) => {
+    setMaterialId(id);
   }
 
   return (
@@ -65,7 +84,7 @@ const ProductDetails = ({
           padding: (theme) => theme.spacing(2),
         }}
         >
-         'Add new product'
+         `Add new product`
         <IconButton
           sx={{
             position: 'absolute',
@@ -106,17 +125,33 @@ const ProductDetails = ({
           <FormControlLabel
             control={
               <Switch
-                checked={published || false}
-                onChange={()=>setPublished(!published)}
-                />} label="Publised"
+                checked={available || false}
+                onChange={()=>setAvailable(!available)}
+                />} label="Available"
             />
-          <Dimensions
-            loadDimensions={loadDimensions}
-            dimensionsList={dimensionsList}
-            deleteDimension={deleteDimension}
-            addDimension={addDimension}
-            handlePickDimension = {handlePickDimension}
-            setDimensionId={setDimensionId}
+          <ProductProperties
+            loadingList={loadDimensions}
+            propsList={dimensionsList}
+            deleteProp={deleteDimension}
+            addProp={addDimension}
+            handlePickProp={handlePickDimension}
+            propName="Dimension"
+            />
+          <ProductProperties
+            loadingList={loadBrands}
+            propsList={brandsList}
+            deleteProp={deleteBrand}
+            addProp={addBrand}
+            handlePickProp={handlePickBrand}
+            propName="Brand"
+            />
+          <ProductProperties
+            loadingList={loadMaterials}
+            propsList={materialsList}
+            deleteProp={deleteMaterial}
+            addProp={addMaterial}
+            handlePickProp={handlePickMaterial}
+            propName="Material"
             />
         <FormControl>
             <BottomNavigation
@@ -140,6 +175,17 @@ ProductDetails.propTypes = {
   dimensionsList: PropTypes.array,
   deleteDimension: PropTypes.func,
   addDimension: PropTypes.func,
+  loadBrands: PropTypes.func,
+  brandsList: PropTypes.array,
+  deleteBrand: PropTypes.func,
+  addBrand: PropTypes.func,
+  loadMaterials: PropTypes.func,
+  materialsList: PropTypes.array,
+  deleteMaterial: PropTypes.func,
+  addMaterial: PropTypes.func,
+  openDialog: PropTypes.bool,
+  handleDialog: PropTypes.func,
+  handleAddProduct: PropTypes.func
 }
 
 export default ProductDetails

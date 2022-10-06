@@ -6,7 +6,7 @@ module.exports= (sequelize, Sequelize) => {
     description: {
       type: Sequelize.STRING
     },
-    published: {
+    available: {
       type: Sequelize.BOOLEAN
     },
     // data type of ref details table should be converted b4 res

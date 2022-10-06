@@ -26,7 +26,7 @@ const ProductsList = ({
   handleDelete
 }) => {
   const dispatch = useDispatch();
-  const columns = ['Select', 'Name','Dimension', 'Brand', 'Published', 'Color', 'Price', 'Actions'];
+  const columns = ['Select', 'Name','Dimension', 'Brand', 'Material', 'Color', 'Price', 'Available', 'Actions'];
   useEffect(() => {
     dispatch(loadProducts());
   }, [dispatch, loadProducts])
@@ -79,16 +79,19 @@ const ProductsList = ({
                           {item.dimension.length ? item.dimension[0].name : '' }
                         </TableCell>
                         <TableCell>
-                          {item.brand}
+                          {item.brand.length ? item.brand[0].name : ''}
                         </TableCell>
                         <TableCell>
-                          {item.published ? 'Published' : 'Unpublished'}
+                          {item.material.length ? item.material[0].name : ''}
                         </TableCell>
                         <TableCell>
                           {item.color}
                         </TableCell>
                         <TableCell>
                           {item.price}
+                        </TableCell>
+                        <TableCell>
+                          {item.available ? 'Available' : 'Out of order'}
                         </TableCell>
                         <TableCell>
                           <ButtonGroup>

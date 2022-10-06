@@ -1,3 +1,4 @@
+
 module.exports = (app) => {
   const dimensionsController = require('../../controllers/products/dimensions.controller');
   var dimensionsRouter = require('express').Router();
@@ -7,5 +8,5 @@ module.exports = (app) => {
   dimensionsRouter.delete('/:id', dimensionsController.delete);
   dimensionsRouter.put('/:id',dimensionsController.update);
 
-  app.use('/api/products/dimensions/', dimensionsRouter);
+  app.use('/api/products/dimensions', dimensionsRouter);
 };

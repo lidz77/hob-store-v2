@@ -1,5 +1,5 @@
 const db = require('../../models')
-const Dimensions = db.dimensions;
+const Brands = db.brands;
 
 exports.create = (req, res) => {
   const name = req.body.name;
@@ -10,37 +10,36 @@ exports.create = (req, res) => {
     return;
   }
 
-  Dimensions.create({
+  Brands.create({
     name: name
   }).then((result) => {
     res.send(result);
   }).catch((err) => {
     res.status(500).send({
-      message: err.message || 'Error while creating new dimension'
+      message: err.message || 'Error while creating new brand'
     })
   });
 }
 
 exports.findAll = (req, res) => {
-  Dimensions.findAll({
+  Brands.findAll({
     where: null
   }).then((result) => {
     res.send(result);
   }).catch((err) => {
     res.status(500).send({
-      message: err.message || 'Cant get the dimensions'
+      message: err.message || 'Cant get the brands'
     })
   });
 }
 
 exports.delete = (req, res) => {
   const id = req.params.id;
-  Dimensions.destroy({
+  Brands.destroy({
     where: {
       id: id
     }
   }).then((result) => {
-    console.log(result);
     if (result === 1) {
       res.send({
         message: `ID ${id} delete successfully`,
@@ -59,20 +58,19 @@ exports.delete = (req, res) => {
 }
 
 exports.update = (req, res) => {
-  console.log(req);
   const id = req.params.id;
   const data = {
     name: req.body.name
   };
 
-  Dimensions.update(data, {
+  Brands.update(data, {
     where: {
       id: id
     }
   }).then((result) => {
     if(result == 1){
       res.send({
-        message: `Update category id ${id} successfully`,
+        message: `Update brand id ${id} successfully`,
         data: {
           ...data,
           id: parseInt(id)

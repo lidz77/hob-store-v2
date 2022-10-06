@@ -1,5 +1,5 @@
 const db = require('../../models')
-const Dimensions = db.dimensions;
+const Materials = db.materials;
 
 exports.create = (req, res) => {
   const name = req.body.name;
@@ -10,32 +10,32 @@ exports.create = (req, res) => {
     return;
   }
 
-  Dimensions.create({
+  Materials.create({
     name: name
   }).then((result) => {
     res.send(result);
   }).catch((err) => {
     res.status(500).send({
-      message: err.message || 'Error while creating new dimension'
+      message: err.message || 'Error while creating new materials'
     })
   });
 }
 
 exports.findAll = (req, res) => {
-  Dimensions.findAll({
+  Materials.findAll({
     where: null
   }).then((result) => {
     res.send(result);
   }).catch((err) => {
     res.status(500).send({
-      message: err.message || 'Cant get the dimensions'
+      message: err.message || 'Cant get the materials'
     })
   });
 }
 
 exports.delete = (req, res) => {
   const id = req.params.id;
-  Dimensions.destroy({
+  Materials.destroy({
     where: {
       id: id
     }
@@ -65,14 +65,14 @@ exports.update = (req, res) => {
     name: req.body.name
   };
 
-  Dimensions.update(data, {
+  Materials.update(data, {
     where: {
       id: id
     }
   }).then((result) => {
     if(result == 1){
       res.send({
-        message: `Update category id ${id} successfully`,
+        message: `Update materials id ${id} successfully`,
         data: {
           ...data,
           id: parseInt(id)

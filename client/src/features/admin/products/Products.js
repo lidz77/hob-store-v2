@@ -9,7 +9,15 @@ import {
   selectDimensions,
   deleteDimension,
   addDimension,
-} from './dimensionsSlice';
+  loadBrands,
+  selectBrands,
+  deleteBrand,
+  addBrand,
+  loadMaterials,
+  selectMaterials,
+  deleteMaterial,
+  addMaterial,
+} from './productDetailsSlice';
 import {
   loadProducts,
   isLoadingProducts,
@@ -21,10 +29,11 @@ import {
 const Products = () => {
   const dispatch = useDispatch();
   const dimensionsList = useSelector(selectDimensions);
+  const brandsList = useSelector(selectBrands);
+  const materialsList = useSelector(selectMaterials);
   const [openDialog, setOpenDialog] = useState(false);
   const productsIsLoading = useSelector(isLoadingProducts);
   const filteredProductsList = useSelector(selectVisibleProducts);
-
   const handleDialog = () => {
     setOpenDialog(!openDialog);
   }
@@ -45,6 +54,14 @@ const Products = () => {
         dimensionsList={dimensionsList}
         deleteDimension={deleteDimension}
         addDimension={addDimension}
+        loadBrands={loadBrands}
+        brandsList={brandsList}
+        deleteBrand={deleteBrand}
+        addBrand={addBrand}
+        loadMaterials={loadMaterials}
+        materialsList={materialsList}
+        deleteMaterial={deleteMaterial}
+        addMaterial={addMaterial}
         handleDialog={handleDialog}
         handleAddProduct={handleAddProduct}
         />

@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 import PropTypes from 'prop-types';
-import { useTheme } from '@mui/material/styles';
+// import { useTheme } from '@mui/material/styles';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -24,37 +24,40 @@ const MenuProps = {
   },
 };
 
-function getStyles(name, prop, theme) {
-  return {
-    fontWeight:
-      prop.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  };
-}
+// function getStyles(name, prop, theme) {
+//   return {
+//     fontWeight:
+//       prop.indexOf(name) === -1
+//         ? theme.typography.fontWeightRegular
+//         : theme.typography.fontWeightMedium,
+//   };
+// }
 
 const ProductProperties = ({
-  loadingList,
   propsList,
   deleteProp,
   addProp,
   handlePickProp,
-  propName
+  propName,
+  propDetails
 }) => {
-  const theme = useTheme();
-  const [prop, setProp] = useState('');
-  const [newProp, setNewProp] = useState('');
-  const dispatch = useDispatch()
+  let [prop, setProp] = useState('');
+  let [newProp, setNewProp] = useState('');
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(loadingList(propName));
-  }, [dispatch, loadingList]);
+    if(propDetails){
+      setProp(propDetails.name);
+    }
+  },[propName])
 
   const handleDelete = (id) => {
     dispatch(deleteProp(id));
   }
 
   const handleChange = (e) => {
+    console.log(e);
+    // handlePickProp(e.target.value.id);
     setProp(e.target.value);
   };
 
@@ -70,14 +73,14 @@ const ProductProperties = ({
      <FormControl sx={{ m: 1, width: 300, mt: 3 }}>
        <Select
          displayEmpty
-         value={prop}
+         value={prop || ''}
          onChange={handleChange}
          input={<OutlinedInput />}
          renderValue={(selected) => {
            if (selected.length === 0) {
              return <em>Select {propName}</em>;
            }
-
+           console.log(selected)
            return selected
          }}
          MenuProps={MenuProps}
@@ -90,7 +93,11 @@ const ProductProperties = ({
            <MenuItem
              key={item.id+propName}
              value={item.name || ''}
-             onClick={() => handlePickProp(item.id)}
+             name={item.id}
+             onClick={(e)=>{
+               e.preventDefault();
+               handlePickProp(item.id);
+             }}
            >
              {item.name}
              <Box sx={{display: {xs: 'none', md: 'flex', }}}>
@@ -115,7 +122,7 @@ const ProductProperties = ({
              id="standard-basic"
              label={"New " + propName}
              variant="standard"
-             value={newProp}
+             value={newProp || ""}
              onChange={(e) => setNewProp(e.target.value)}
              />
            <Box sx={{display: {xs: 'none', md: 'flex'}}}>

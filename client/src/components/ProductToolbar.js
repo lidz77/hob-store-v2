@@ -60,7 +60,8 @@ const ProductToolbar = ({
   )
 }
 ProductToolbar.propTypes = {
-
+  handleDialog: PropTypes.func,
+  setSearchTerm: PropTypes.func
 }
 
 export default ProductToolbar

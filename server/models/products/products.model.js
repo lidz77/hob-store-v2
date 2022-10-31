@@ -13,9 +13,12 @@ module.exports= (sequelize, Sequelize) => {
     number_of_hobs: {
       type: Sequelize.STRING
     },
+    color: {
+      type: Sequelize.STRING
+    },
     price: {
       type: Sequelize.INTEGER
-    }
+    },
   })
   return Products;
 }

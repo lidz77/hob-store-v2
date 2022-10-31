@@ -14,22 +14,23 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Checkbox from '@mui/material/Checkbox';
+import Avatar from '@mui/material/Avatar';
 
 const ProductsList = ({
   productsIsLoading,
   loadProducts,
   filteredProductsList,
   handleSelectItem,
-  handleSetDetails,
+  handleSetProductDetails,
   setEditMode,
   handleDialog,
-  handleDelete
+  handleDeleteProduct
 }) => {
   const dispatch = useDispatch();
   const columns = ['Select', 'Name','Dimension', 'Brand', 'Material', 'Color', 'Price', 'Available', 'Actions'];
   useEffect(() => {
     dispatch(loadProducts());
-  }, [dispatch, loadProducts])
+  }, [dispatch])
 
   return (
     <Box sx={{ flexGrow : 1}}>
@@ -76,16 +77,22 @@ const ProductsList = ({
                           {item.title}
                         </TableCell>
                         <TableCell>
-                          {item.dimension.length ? item.dimension[0].name : '' }
+                          {item.dimension? item.dimension.name : '' }
                         </TableCell>
                         <TableCell>
-                          {item.brand.length ? item.brand[0].name : ''}
+                          {item.brand ? item.brand.name : ''}
                         </TableCell>
                         <TableCell>
-                          {item.material.length ? item.material[0].name : ''}
+                          {item.material ? item.material.name : ''}
                         </TableCell>
                         <TableCell>
-                          {item.color}
+                          <Avatar
+                            sx={{
+                              bgcolor: item.color,
+                              width: 30,
+                              height: 30
+                            }}
+                            > </Avatar>
                         </TableCell>
                         <TableCell>
                           {item.price}
@@ -97,13 +104,13 @@ const ProductsList = ({
                           <ButtonGroup>
                             <Button color="secondary"
                               onClick={() => {
-                                handleSetDetails(item);
+                                handleSetProductDetails(item);
                                 setEditMode(true);
                                 handleDialog();
                               }}
                               >Edit</Button>
                             <Button
-                              onClick={() => handleDelete(item.id)}
+                              onClick={() => handleDeleteProduct(item.id)}
                               variant="outlined" color="error">Delete</Button>
                           </ButtonGroup>
                         </TableCell>
@@ -119,7 +126,14 @@ const ProductsList = ({
   )
 }
 ProductsList.propTypes = {
-
+  productsIsLoading: PropTypes.bool,
+  loadProducts: PropTypes.func,
+  filteredProductsList: PropTypes.array,
+  handleSelectItem: PropTypes.func,
+  handleSetProductDetails: PropTypes.func,
+  setEditMode: PropTypes.func,
+  handleDialog: PropTypes.func,
+  handleDelete: PropTypes.func
 }
 
 export default ProductsList

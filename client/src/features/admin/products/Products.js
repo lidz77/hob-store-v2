@@ -1,39 +1,36 @@
-import React,{useState} from 'react';
+import React,{useState, useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 import {useSelector} from 'react-redux';
 import ProductToolbar from '../../../components/ProductToolbar';
 import ProductDetails from './ProductDetails';
-import ProductsList from './ProductsList'
-import {
-  loadDimensions,
-  selectDimensions,
-  deleteDimension,
-  addDimension,
-  loadBrands,
-  selectBrands,
-  deleteBrand,
-  addBrand,
-  loadMaterials,
-  selectMaterials,
-  deleteMaterial,
-  addMaterial,
-} from './productDetailsSlice';
+import ProductsList from './ProductsList';
+
+
 import {
   loadProducts,
+  createProduct,
+  updateProduct,
+  deleteProduct,
   isLoadingProducts,
   selectVisibleProducts,
-  createProduct,
   setSearchTerm,
+  selectProductDetails,
+  setProductDetails,
 } from './productsSlice'
 
 const Products = () => {
   const dispatch = useDispatch();
-  const dimensionsList = useSelector(selectDimensions);
-  const brandsList = useSelector(selectBrands);
-  const materialsList = useSelector(selectMaterials);
-  const [openDialog, setOpenDialog] = useState(false);
+  const productDetails = useSelector(selectProductDetails);
   const productsIsLoading = useSelector(isLoadingProducts);
   const filteredProductsList = useSelector(selectVisibleProducts);
+
+  const [openDialog, setOpenDialog] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+
+  useEffect(() => {
+    console.log('load props succeed');
+  }, [dispatch])
+
   const handleDialog = () => {
     setOpenDialog(!openDialog);
   }
@@ -42,33 +39,47 @@ const Products = () => {
     dispatch(createProduct(newProductInfo));
   }
 
+  const handleUpdateProduct = (id, data) => {
+    dispatch(updateProduct(id, data));
+  }
+
+  const handleSetProductDetails = (item) => {
+    dispatch(setProductDetails(item));
+  }
+
+  const handleDeleteProduct = (idArray) => {
+    if(!Array.isArray(idArray)){
+      idArray = [idArray];
+    }
+    dispatch(deleteProduct(idArray));
+  }
+
   return (
     <main>
       <ProductToolbar
         handleDialog={handleDialog}
         setSearchTerm={setSearchTerm}
         />
-      <ProductDetails
-        openDialog={openDialog}
-        loadDimensions={loadDimensions}
-        dimensionsList={dimensionsList}
-        deleteDimension={deleteDimension}
-        addDimension={addDimension}
-        loadBrands={loadBrands}
-        brandsList={brandsList}
-        deleteBrand={deleteBrand}
-        addBrand={addBrand}
-        loadMaterials={loadMaterials}
-        materialsList={materialsList}
-        deleteMaterial={deleteMaterial}
-        addMaterial={addMaterial}
-        handleDialog={handleDialog}
-        handleAddProduct={handleAddProduct}
-        />
       <ProductsList
         productsIsLoading={productsIsLoading}
         loadProducts={loadProducts}
         filteredProductsList={filteredProductsList}
+        setProductDetails={setProductDetails}
+        handleSetProductDetails={handleSetProductDetails}
+        setEditMode={setEditMode}
+        handleDialog={handleDialog}
+        handleDeleteProduct={handleDeleteProduct}
+        />
+      <ProductDetails
+        openDialog={openDialog}
+        handleDialog={handleDialog}
+        handleAddProduct={handleAddProduct}
+        onSucceed={() => setOpenDialog(false)}
+        setEditMode={setEditMode}
+        editMode={editMode}
+        productDetails={productDetails}
+        handleUpdateProduct={handleUpdateProduct}
+        handleSetProductDetails={handleSetProductDetails}
         />
     </main>
   )

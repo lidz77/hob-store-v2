@@ -9,6 +9,12 @@ class ProductsDataService {
   };
   findById(id){
     return http.get('/products/:id', id)
+  };
+  update(id, data){
+    return http.put(`/products/${id}`, {id, data})
+  };
+  delete(idArray){
+    return http.delete('/products/', {params: {idArray: idArray}})
   }
 }
 export default new ProductsDataService();

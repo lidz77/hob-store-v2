@@ -1,5 +1,5 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
-import ProductDetailsDataService from '../../../services/products/productdetails.services';
+import ProductPropsDataService from '../../../services/products/productprops.services';
 
 
 const deleteById = (id, objectsArray) => {
@@ -8,10 +8,9 @@ const deleteById = (id, objectsArray) => {
 }
 
 export const loadDimensions = createAsyncThunk(
-  'products/productDetails/loadDimensions',
+  'products/productProps/loadDimensions',
   async () => {
-    const res = await ProductDetailsDataService.getAll('dimensions').then((result) => {
-      console.log(result);
+    const res = await ProductPropsDataService.getAll('dimensions').then((result) => {
       return result.data;
     }).catch((err) => {
       console.log(err);
@@ -21,10 +20,9 @@ export const loadDimensions = createAsyncThunk(
 );
 
 export const deleteDimension = createAsyncThunk(
-  'products/productDetails/deleteDimension',
+  'products/productProps/deleteDimension',
   async (id) => {
-    const res = await ProductDetailsDataService.delete('dimensions', id).then((result) => {
-      console.log(result);
+    const res = await ProductPropsDataService.delete('dimensions', id).then((result) => {
       return result.data;
     }).catch((err) => {
       console.log(err)
@@ -34,10 +32,9 @@ export const deleteDimension = createAsyncThunk(
 );
 
 export const addDimension = createAsyncThunk(
-  'products/productDetails/addDimension',
+  'products/productProps/addDimension',
   async (newData) => {
-    const res = await ProductDetailsDataService.create('dimensions', newData).then((result) => {
-      console.log(result);
+    const res = await ProductPropsDataService.create('dimensions', newData).then((result) => {
       return result.data;
     }).catch((err) => {
       console.log(err);
@@ -46,10 +43,9 @@ export const addDimension = createAsyncThunk(
   }
 )
 export const loadBrands = createAsyncThunk(
-  'products/productDetails/loadBrands',
+  'products/productProps/loadBrands',
   async () => {
-    const res = await ProductDetailsDataService.getAll('brands').then((result) => {
-      console.log(result);
+    const res = await ProductPropsDataService.getAll('brands').then((result) => {
       return result.data;
     }).catch((err) => {
       console.log(err);
@@ -59,10 +55,9 @@ export const loadBrands = createAsyncThunk(
 );
 
 export const deleteBrand = createAsyncThunk(
-  'products/productDetails/deleteBrand',
+  'products/productProps/deleteBrand',
   async (id) => {
-    const res = await ProductDetailsDataService.delete('brands', id).then((result) => {
-      console.log(result);
+    const res = await ProductPropsDataService.delete('brands', id).then((result) => {
       return result.data;
     }).catch((err) => {
       console.log(err)
@@ -72,10 +67,9 @@ export const deleteBrand = createAsyncThunk(
 );
 
 export const addBrand = createAsyncThunk(
-  'products/productDetails/addBrand',
+  'products/productProps/addBrand',
   async (newData) => {
-    const res = await ProductDetailsDataService.create('brands', newData).then((result) => {
-      console.log(result);
+    const res = await ProductPropsDataService.create('brands', newData).then((result) => {
       return result.data;
     }).catch((err) => {
       console.log(err);
@@ -85,10 +79,9 @@ export const addBrand = createAsyncThunk(
 )
 
 export const loadMaterials = createAsyncThunk(
-  'products/productDetails/loadMaterials',
+  'products/productProps/loadMaterials',
   async () => {
-    const res = await ProductDetailsDataService.getAll('materials').then((result) => {
-      console.log(result);
+    const res = await ProductPropsDataService.getAll('materials').then((result) => {
       return result.data;
     }).catch((err) => {
       console.log(err);
@@ -98,10 +91,9 @@ export const loadMaterials = createAsyncThunk(
 );
 
 export const deleteMaterial = createAsyncThunk(
-  'products/productDetails/deleteMaterial',
+  'products/productProps/deleteMaterial',
   async (id) => {
-    const res = await ProductDetailsDataService.delete('materials', id).then((result) => {
-      console.log(result);
+    const res = await ProductPropsDataService.delete('materials', id).then((result) => {
       return result.data;
     }).catch((err) => {
       console.log(err)
@@ -111,10 +103,9 @@ export const deleteMaterial = createAsyncThunk(
 );
 
 export const addMaterial = createAsyncThunk(
-  'products/productDetails/addMaterial',
+  'products/productProps/addMaterial',
   async (newData) => {
-    const res = await ProductDetailsDataService.create('materials', newData).then((result) => {
-      console.log(result);
+    const res = await ProductPropsDataService.create('materials', newData).then((result) => {
       return result.data;
     }).catch((err) => {
       console.log(err);
@@ -123,8 +114,8 @@ export const addMaterial = createAsyncThunk(
   }
 )
 
-const productDetailsSlice = createSlice({
-  name: 'productDetails',
+const productPropsSlice = createSlice({
+  name: 'productProps',
   initialState: {
     dimensionsList: [],
     brandsList:[],
@@ -257,13 +248,13 @@ const productDetailsSlice = createSlice({
 });
 
 export const selectDimensions = (state) => {
-  return state.productDetails.dimensionsList;
+  return state.productProps.dimensionsList;
 }
 export const selectBrands = (state) => {
-  return state.productDetails.brandsList;
+  return state.productProps.brandsList;
 }
 export const selectMaterials = (state) => {
-  return state.productDetails.materialsList;
+  return state.productProps.materialsList;
 }
 
-export default productDetailsSlice.reducer;
+export default productPropsSlice.reducer;

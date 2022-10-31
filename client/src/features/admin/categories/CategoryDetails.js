@@ -28,6 +28,13 @@ const CategoryDetails = ({
   const [description, setDescription] = useState('');
   const [published, setPublished] = useState(false);
 
+  const clearDetailsAndCloseDialog = () => {
+    setTitle('');
+    setDescription('');
+    setPublished(false);
+    handleDialog(false);
+  }
+
   useEffect(() => {
     setTitle(categoryDetails.title);
     setDescription(categoryDetails.description);
@@ -46,10 +53,7 @@ const CategoryDetails = ({
     }else{
       handleAdd(details);
     }
-    setTitle('');
-    setDescription('');
-    setPublished(false);
-    handleDialog(false);
+    clearDetailsAndCloseDialog();
   }
 
   return (
@@ -71,7 +75,7 @@ const CategoryDetails = ({
             top: 8,
             color: (theme) => theme.palette.grey[500]
           }}
-          onClick={handleDialog}
+          onClick={clearDetailsAndCloseDialog}
           >
           <CloseIcon />
         </IconButton>
@@ -115,7 +119,7 @@ const CategoryDetails = ({
                 type="submit"
                 icon={<DoneIcon />} />
               <BottomNavigationAction
-                onClick={handleDialog}
+                onClick={clearDetailsAndCloseDialog}
                 label="Cancel" icon={<CloseIcon />} />
             </BottomNavigation>
         </FormControl>

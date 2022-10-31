@@ -1,8 +1,7 @@
 import http from '../../http-common';
 
-class ProductDetailsDataService {
+class ProductPropsDataService {
   getAll(propName){
-    console.log(propName)
     return http.get(`/products/${propName}`);
   };
   delete(propName, id){
@@ -16,4 +15,4 @@ class ProductDetailsDataService {
   };
 }
 
-export default new ProductDetailsDataService();
+export default new ProductPropsDataService();

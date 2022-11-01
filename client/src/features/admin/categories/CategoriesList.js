@@ -25,7 +25,7 @@ const CategoresList = ({
   setEditMode
 }) => {
   const dispatch = useDispatch();
-  const columns = ['Select', 'ID', 'Title', 'Description', 'Published', 'Actions'];
+  const columns = ['Select', 'ID', 'Name', 'Description', 'Published', 'Actions'];
 
   useEffect(() => {
     dispatch(loadCategories());
@@ -76,7 +76,7 @@ const CategoresList = ({
                           {item.id}
                         </TableCell>
                         <TableCell>
-                          {item.title}
+                          {item.name}
                         </TableCell>
                         <TableCell>
                           {item.description}

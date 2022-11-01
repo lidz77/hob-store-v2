@@ -1,42 +1,47 @@
 const db = require('../../models');
 const Products = db.products;
+const Categories = db.categories;
 const Dimensions = db.dimensions;
 const Brands = db.brands;
 const Materials = db.materials;
 
 const relationalArray = [
   {
+    model: Categories,
+    as: 'category',
+    attributes: ['name'],
+    // through: {
+    //   attributes: []
+    // }
+  },
+  {
     model: Dimensions,
-    as: 'dimension',
-    attributes: ['id', 'name'],
-    through: {
-      attributes: []
-    }
+    attributes: ['name'],
+    // through: {
+    //   attributes: []
+    // }
   },
   {
     model: Brands,
     as: 'brand',
-    attributes: ['id', 'name'],
-    through: {
-      attributes: []
-    }
+    attributes: ['name'],
+    // through: {
+    //   attributes: []
+    // }
   },
   {
     model: Materials,
     as: 'material',
-    attributes: ['id', 'name'],
-    through: {
-      attributes: []
-    }
+    attributes: ['name'],
+    // through: {
+    //   attributes: []
+    // }
   },
 ];
 
 exports.create = (req, res) => {
   const title = req.body.title;
-  const dimensionId = req.body.dimensionId;
-  const brandId = req.body.brandId;
-  const materialId = req.body.materialId;
-  var productId;
+  let productId;
   if(!title){
     res.status(400).send({
       message: "Title must be required"
@@ -44,27 +49,9 @@ exports.create = (req, res) => {
     return;
   }
   Products.create(req.body).then((productResult) => {
+    console.log(req.body);
     productId = productResult.id;
-    Products.findByPk(productId).then((product) => {
-      if (!isNaN(dimensionId)) {
-        Dimensions.findByPk(dimensionId).then((dimensionResult) => {
-          product.addDimension(dimensionResult);
-          console.log(`Add product to dimension success`)
-        });
-      }
-      if (!isNaN(brandId)) {
-        Brands.findByPk(brandId).then((brandResult) => {
-          product.addBrand(brandResult);
-          console.log(`Add product to brand success`)
-        });
-      }
-      if (!isNaN(materialId)) {
-        Materials.findByPk(materialId).then((materialResult) => {
-          product.addMaterial(materialResult);
-          console.log(`Add product to material success`)
-        });
-      }
-    }).then(
+    Products.findByPk(productId).then(
       Products.findByPk(productId, {
         include: relationalArray
       }).then((result) => {

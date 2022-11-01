@@ -4,8 +4,6 @@ import {useSelector} from 'react-redux';
 import ProductToolbar from '../../../components/ProductToolbar';
 import ProductDetails from './ProductDetails';
 import ProductsList from './ProductsList';
-
-
 import {
   loadProducts,
   createProduct,
@@ -16,18 +14,44 @@ import {
   setSearchTerm,
   selectProductDetails,
   setProductDetails,
-} from './productsSlice'
+  selectItem,
+  selectedItems
+} from './productsSlice';
+import {
+  loadCategories,
+  selectCategories
+} from '../categories/categoriesSlice';
+import{
+  loadDimensions,
+  selectDimensions,
+  deleteDimension,
+  addDimension,
+  loadBrands,
+  selectBrands,
+  deleteBrand,
+  addBrand,
+  loadMaterials,
+  selectMaterials,
+  deleteMaterial,
+  addMaterial,
+} from '../products/productPropsSlice'
 
 const Products = () => {
   const dispatch = useDispatch();
   const productDetails = useSelector(selectProductDetails);
   const productsIsLoading = useSelector(isLoadingProducts);
   const filteredProductsList = useSelector(selectVisibleProducts);
+  const selectedItemsList = useSelector(selectedItems);
 
   const [openDialog, setOpenDialog] = useState(false);
   const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
+    dispatch(loadProducts());
+    dispatch(loadCategories());
+    dispatch(loadDimensions());
+    dispatch(loadBrands());
+    dispatch(loadMaterials());
     console.log('load props succeed');
   }, [dispatch])
 
@@ -47,6 +71,10 @@ const Products = () => {
     dispatch(setProductDetails(item));
   }
 
+  const handleSelectItem = (item) => {
+    dispatch(selectItem(item));
+  }
+
   const handleDeleteProduct = (idArray) => {
     if(!Array.isArray(idArray)){
       idArray = [idArray];
@@ -59,16 +87,18 @@ const Products = () => {
       <ProductToolbar
         handleDialog={handleDialog}
         setSearchTerm={setSearchTerm}
+        handleDeleteProduct={handleDeleteProduct}
+        selectedItemsList={selectedItemsList}
         />
       <ProductsList
         productsIsLoading={productsIsLoading}
-        loadProducts={loadProducts}
         filteredProductsList={filteredProductsList}
         setProductDetails={setProductDetails}
         handleSetProductDetails={handleSetProductDetails}
         setEditMode={setEditMode}
         handleDialog={handleDialog}
         handleDeleteProduct={handleDeleteProduct}
+        handleSelectItem={handleSelectItem}
         />
       <ProductDetails
         openDialog={openDialog}
@@ -80,6 +110,17 @@ const Products = () => {
         productDetails={productDetails}
         handleUpdateProduct={handleUpdateProduct}
         handleSetProductDetails={handleSetProductDetails}
+        selectDimensions={selectDimensions}
+        deleteDimension={deleteDimension}
+        addDimension={addDimension}
+        selectBrands={selectBrands}
+        deleteBrand={deleteBrand}
+        addBrand={addBrand}
+        selectMaterials={selectMaterials}
+        deleteMaterial={deleteMaterial}
+        addMaterial={addMaterial}
+        selectProductDetails={selectProductDetails}
+        selectCategories={selectCategories}
         />
     </main>
   )

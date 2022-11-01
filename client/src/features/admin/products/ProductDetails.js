@@ -18,24 +18,6 @@ import IconButton from '@mui/material/IconButton';
 import ProductProperties from '../../../components/ProductProperties';
 import {CirclePicker} from 'react-color';
 
-import {
-  loadDimensions,
-  selectDimensions,
-  deleteDimension,
-  addDimension,
-  loadBrands,
-  selectBrands,
-  deleteBrand,
-  addBrand,
-  loadMaterials,
-  selectMaterials,
-  deleteMaterial,
-  addMaterial,
-} from './productPropsSlice';
-
-import {
-  selectProductDetails,
-} from './productsSlice'
 
 const ProductDetails = ({
   openDialog,
@@ -44,21 +26,33 @@ const ProductDetails = ({
   handleUpdateProduct,
   handleSetProductDetails,
   setEditMode,
-  editMode
+  editMode,
+  selectProductDetails,
+  selectDimensions,
+  deleteDimension,
+  addDimension,
+  selectBrands,
+  deleteBrand,
+  addBrand,
+  selectMaterials,
+  deleteMaterial,
+  addMaterial,
+  selectCategories
 }) => {
-  const dispatch = useDispatch();
   const productDetails = useSelector(selectProductDetails);
   const dimensionsList = useSelector(selectDimensions);
   const brandsList = useSelector(selectBrands);
   const materialsList = useSelector(selectMaterials);
+  const categoriesList = useSelector(selectCategories);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState(0);
   const [available, setAvailable] = useState(false);
-  const [dimensionId, setDimensionId] = useState(0);
-  const [brandId, setBrandId] = useState(0);
-  const [materialId, setMaterialId] = useState(0);
-  const [color, setColor] = useState();
+  const [dimensionId, setDimensionId] = useState(null);
+  const [categoryId, setCategoryId] = useState(null);
+  const [brandId, setBrandId] = useState(null);
+  const [materialId, setMaterialId] = useState(null);
+  const [color, setColor] = useState('#f795548');
 
 
   const clearDetailsAndCloseDialog = () => {
@@ -66,9 +60,10 @@ const ProductDetails = ({
     setTitle('');
     setDescription('');
     setAvailable(false);
-    setDimensionId(0);
-    setBrandId(0);
-    setMaterialId(0);
+    setCategoryId(null);
+    setDimensionId(null);
+    setBrandId(null);
+    setMaterialId(null);
     setPrice(0);
     handleDialog(false);
     handleSetProductDetails({});
@@ -81,15 +76,13 @@ const ProductDetails = ({
       setDescription(productDetails.description);
       setPrice(productDetails.price);
       setAvailable(productDetails.available);
-      setDimensionId(productDetails.dimension ? productDetails.dimension.id : 0);
-      setBrandId(productDetails.brand ? productDetails.brand.id : 0);
-      setMaterialId(productDetails.material ? productDetails.brand.id : 0);
+      setDimensionId(productDetails.dimension ? productDetails.dimension.id : null);
+      setCategoryId(productDetails.category ? productDetails.category.id : null);
+      setBrandId(productDetails.brand ? productDetails.brand.id : null);
+      setMaterialId(productDetails.material ? productDetails.brand.id : null);
       setColor(productDetails.color);
       setPrice(productDetails.price);
     }
-    dispatch(loadDimensions());
-    dispatch(loadBrands());
-    dispatch(loadMaterials());
   }, [productDetails])
 
   const handleSubmit = (e) => {
@@ -101,6 +94,7 @@ const ProductDetails = ({
       dimensionId: dimensionId,
       brandId: brandId,
       materialId: materialId,
+      categoryId: categoryId,
       price: price,
       color: color.hex
     }
@@ -123,6 +117,9 @@ const ProductDetails = ({
   }
   const handlePickMaterial = (id) => {
     setMaterialId(id);
+  }
+  const handlePickCategory = (id) => {
+    setCategoryId(id);
   }
 
   return (
@@ -204,6 +201,12 @@ const ProductDetails = ({
             handlePickProp={handlePickMaterial}
             propName="Material"
             propDetails={productDetails.material ? productDetails.material : {}}
+            />
+          <ProductProperties
+            propsList={categoriesList}
+            handlePickProp={handlePickCategory}
+            propName="Category"
+            propDetails={productDetails.category ? productDetails.category : {}}
             />
             <FormControl>
                 <InputLabel htmlFor="product-description">Price</InputLabel>

@@ -26,36 +26,53 @@ db.dimensions = require('./products/dimensions.model')(sequelize, Sequelize);
 db.brands = require('./products/brands.model')(sequelize, Sequelize);
 db.materials = require('./products/materials.model')(sequelize, Sequelize);
 //relationship
-db.products.belongsToMany(db.dimensions, {
-  through: 'product_dimension',
-  as: 'dimension',
-  foreignKey: 'product_id'
+db.categories.hasMany(db.products, {
+  foreignKey: 'categoryId'
 });
-db.products.belongsToMany(db.brands, {
-  through: 'product_brand',
-  as: 'brand',
-  foreignKey: 'product_id'
+db.products.belongsTo(db.categories);
+db.dimensions.hasMany(db.products, {
+  foreignKey: 'dimensionId'
 });
-db.products.belongsToMany(db.materials, {
-  through: 'product_material',
-  as: 'material',
-  foreignKey: 'product_id'
+db.products.belongsTo(db.dimensions);
+db.brands.hasMany(db.products, {
+  foreignKey: 'brandId'
 });
-db.dimensions.belongsToMany(db.products, {
-  through: 'product_dimension',
-  as: 'product',
-  foreignKey: 'dimension_id'
+db.products.belongsTo(db.brands);
+db.materials.hasMany(db.products, {
+  foreignKey: 'materialId'
 });
-db.brands.belongsToMany(db.products, {
-  through: 'product_brand',
-  as: 'product',
-  foreignKey: 'brand_id'
-});
-db.materials.belongsToMany(db.products, {
-  through: 'product_material',
-  as: 'product',
-  foreignKey: 'material_id'
-});
+db.products.belongsTo(db.materials);
+
+// db.products.belongsToMany(db.dimensions, {
+//   through: 'product_dimension',
+//   as: 'dimension',
+//   foreignKey: 'product_id'
+// });
+// db.products.belongsToMany(db.brands, {
+//   through: 'product_brand',
+//   as: 'brand',
+//   foreignKey: 'product_id'
+// });
+// db.products.belongsToMany(db.materials, {
+//   through: 'product_material',
+//   as: 'material',
+//   foreignKey: 'product_id'
+// });
+// db.dimensions.belongsToMany(db.products, {
+//   through: 'product_dimension',
+//   as: 'product',
+//   foreignKey: 'dimension_id'
+// });
+// db.brands.belongsToMany(db.products, {
+//   through: 'product_brand',
+//   as: 'product',
+//   foreignKey: 'brand_id'
+// });
+// db.materials.belongsToMany(db.products, {
+//   through: 'product_material',
+//   as: 'product',
+//   foreignKey: 'material_id'
+// });
 
 
 module.exports = db;

@@ -24,19 +24,19 @@ const CategoryDetails = ({
   editMode,
 }) => {
   const dispatch = useDispatch();
-  const [title, setTitle] = useState('');
+  const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [published, setPublished] = useState(false);
 
   const clearDetailsAndCloseDialog = () => {
-    setTitle('');
+    setName('');
     setDescription('');
     setPublished(false);
     handleDialog(false);
   }
 
   useEffect(() => {
-    setTitle(categoryDetails.title);
+    setName(categoryDetails.name);
     setDescription(categoryDetails.description);
     setPublished(categoryDetails.published);
   }, [categoryDetails, dispatch])
@@ -44,7 +44,7 @@ const CategoryDetails = ({
   const handleSubmit = (e) => {
     e.preventDefault();
     const details = {
-      title: title,
+      name: name,
       description: description,
       published: published
     };
@@ -90,8 +90,8 @@ const CategoryDetails = ({
           <Input
             id="category-name"
             aria-describedby="my-helper-text"
-            value={title || ''}
-            onChange={(e) => setTitle(e.target.value)}
+            value={name || ''}
+            onChange={(e) => setName(e.target.value)}
             required
             />
         </FormControl>

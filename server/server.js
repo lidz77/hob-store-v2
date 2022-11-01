@@ -17,7 +17,12 @@ app.use(express.urlencoded({
 //declaire db models
 const db = require('./models');
 // useRoutes has to be us after db synced
-
+// db.sequelize.query('SET FOREIGN_KEY_CHECKS = 0', {raw: true}).then(() => {
+//   db.sequelize.sync(
+//     {force: true}
+//   );
+//   useRoutes();
+// });
 db.sequelize.sync(
   // drop existing table an resync db
   // { force: true }

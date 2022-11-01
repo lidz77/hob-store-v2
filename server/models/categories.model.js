@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
   const Categories = sequelize.define('categories', {
-    title: {
+    name: {
       type: Sequelize.STRING
     },
     description: {

@@ -149,7 +149,7 @@ export const selectCategories = (state) => {
   return state.categories.categoriesList;
 }
 export const selectVisibleCategories = (state) => {
-  return state.categories.categoriesList.filter(item => item.title.toLowerCase().includes(state.categories.searchTerm.toLowerCase()));
+  return state.categories.categoriesList.filter(item => item.name.toLowerCase().includes(state.categories.searchTerm.toLowerCase()));
 }
 export const selectCategoryDetails = (state) => {
   return state.categories.categoryDetails;

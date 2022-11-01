@@ -5,8 +5,8 @@ const Op = db.Sequelize.Op; //for find/ filters
 // get all categories (with tittle filters)
 
 exports.findAll = (req, res) => {
-  const title = req.query.title;
-  var condition = title ? {title : {[Op.like] : `%${title}`}} : null;
+  const name = req.query.name;
+  var condition = name ? {name : {[Op.like] : `%${name}`}} : null;
   Categories.findAll({
     where: condition,
   }).then((result) => {
@@ -20,7 +20,7 @@ exports.findAll = (req, res) => {
 
 //create new category;
 exports.create = (req, res) => {
-  if(!req.body.title){
+  if(!req.body.name){
     res.status(400).send({
       message: "Content cant be empty"
     });
@@ -28,7 +28,7 @@ exports.create = (req, res) => {
   };
 
   const category = {
-    title: req.body.title,
+    name: req.body.name,
     description: req.body.description,
     published: req.body.published ? req.body.published : false
   };

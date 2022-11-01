@@ -15,7 +15,9 @@ import {
 
 const ProductToolbar = ({
   handleDialog,
-  setSearchTerm
+  setSearchTerm,
+  handleDeleteProduct,
+  selectedItemsList,
 }) => {
   const dispatch = useDispatch();
   const handleSetSearchTerm = (e) => {
@@ -41,6 +43,8 @@ const ProductToolbar = ({
             size="large"
             aria-label="Delete category"
             color="inherit"
+            disabled={selectedItemsList.length === 0 ? true : false}
+            onClick={() => handleDeleteProduct(selectedItemsList)}
             >
             <DeleteForeverIcon />
           </IconButton>

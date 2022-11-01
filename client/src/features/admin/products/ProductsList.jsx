@@ -1,5 +1,4 @@
-import React, {useEffect} from 'react';
-import {useDispatch} from 'react-redux';
+import React from 'react';
 import PropTypes from 'prop-types'
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -18,7 +17,6 @@ import Avatar from '@mui/material/Avatar';
 
 const ProductsList = ({
   productsIsLoading,
-  loadProducts,
   filteredProductsList,
   handleSelectItem,
   handleSetProductDetails,
@@ -26,11 +24,7 @@ const ProductsList = ({
   handleDialog,
   handleDeleteProduct
 }) => {
-  const dispatch = useDispatch();
   const columns = ['Select', 'Name','Dimension', 'Brand', 'Material', 'Color', 'Price', 'Available', 'Actions'];
-  useEffect(() => {
-    dispatch(loadProducts());
-  }, [dispatch])
 
   return (
     <Box sx={{ flexGrow : 1}}>

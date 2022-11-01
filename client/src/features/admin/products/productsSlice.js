@@ -64,15 +64,6 @@ export const deleteProduct = createAsyncThunk(
   }
 )
 
-const convertingResult = (arrayOfResult) => {
-  arrayOfResult.forEach((item) => {
-    item.dimension = item.dimension[0];
-    item.brand = item.brand[0];
-    item.material = item.material[0];
-  });
-  return arrayOfResult;
-}
-
 const productsSlice = createSlice({
   name: 'products',
   initialState: {
@@ -89,6 +80,9 @@ const productsSlice = createSlice({
     },
     setProductDetails: (state, action) => {
       state.productDetails = action.payload;
+    },
+    selectItem: (state, action) => {
+      state.selectedItems.includes(action.payload) ? state.selectedItems =  state.selectedItems.filter(item => item !== action.payload) : state.selectedItems.push(action.payload);
     }
   },
   extraReducers: {
@@ -97,7 +91,7 @@ const productsSlice = createSlice({
       state.hasError = false;
     },
     [loadProducts.fulfilled]: (state, action) => {
-      state.productsList = convertingResult(action.payload);
+      state.productsList = action.payload;
       state.isLoading = false;
       state.hasError = false;
     },
@@ -181,13 +175,18 @@ export const selectSearchTerm = (state) => {
   return state.products.searchTerm;
 }
 
+export const selectedItems = (state) => {
+  return state.products.selectedItems;
+}
+
 export const isLoadingProducts = (state) => {
   return state.products.isLoading;
 }
 
 export const {
   setSearchTerm,
-  setProductDetails
+  setProductDetails,
+  selectItem
 } = productsSlice.actions;
 
 export default productsSlice.reducer;

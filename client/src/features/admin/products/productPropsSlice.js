@@ -1,6 +1,35 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import ProductPropsDataService from '../../../services/products/productprops.services';
+import ProductImagesService from '../../../services/products/productimages.services';
 
+
+export const uploadImages = createAsyncThunk(
+  'products/productProps/uploadImages',
+  async (files, ThunkAPI) => {
+    // using uploadSingle for retrieving individual uploading progression
+    for(let i = 0; i< files.length; i++){
+      ProductImagesService.uploadSingle(files[i], (e) => {
+        ThunkAPI.dispatch(setProgressUpload({
+          idx: i,
+          percentage: Math.round((100*e.loaded) /e.total)
+        }));
+      }).then((result) => {
+        console.log(result);
+        return result.data;
+      }).catch((err) => {
+        console.log(err);
+      });
+    }
+    //upload multiple files at once
+    // ProductImagesService.uploadMultiple(files, (e) => {
+    //   console.log(e);
+    // }).then((result) => {
+    //   return result.data;
+    // }).catch((err) => {
+    //   console.log(err);
+    // });
+  }
+)
 
 const deleteById = (id, objectsArray) => {
   objectsArray.splice(objectsArray.findIndex(i => i.id === id), 1);
@@ -120,10 +149,23 @@ const productPropsSlice = createSlice({
     dimensionsList: [],
     brandsList:[],
     materialsList:[],
+    imagesList:[],
     isLoading: true,
     hasError: false
   },
   reducers: {
+    setProgressUpload: (state, action) => {
+      const payload = action.payload;
+      console.log(payload);
+      state.imagesList[payload.idx].percentage = payload.percentage;
+    },
+    setImagesList: (state, action) => {
+      // state.imagesList = action.payload;
+      state.imagesList.push(action.payload);
+    },
+    clearImagesList: (state) => {
+      state.imagesList = [];
+    }
   },
   extraReducers: {
     [loadDimensions.pending]: (state, action) => {
@@ -244,8 +286,25 @@ const productPropsSlice = createSlice({
       state.isLoading = false;
       state.hasError = true;
     },
+    [uploadImages.pending]: (state, action) => {
+      console.log(action.payload);
+      state.isLoading = true;
+      state.hasError = false;
+    },
+    [uploadImages.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.hasError = false;
+    },
+    [uploadImages.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.hasError = true;
+    },
   },
 });
+
+export const selectImages = (state) => {
+  return state.productProps.imagesList;
+}
 
 export const selectDimensions = (state) => {
   return state.productProps.dimensionsList;
@@ -256,5 +315,14 @@ export const selectBrands = (state) => {
 export const selectMaterials = (state) => {
   return state.productProps.materialsList;
 }
+export const selectImagesList = (state) => {
+  return state.productProps.imagesList;
+}
+
+export const {
+  setImagesList,
+  clearImagesList,
+  setProgressUpload
+} = productPropsSlice.actions;
 
 export default productPropsSlice.reducer;

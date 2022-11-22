@@ -25,7 +25,7 @@ const db = require('./models');
 // });
 db.sequelize.sync(
   // drop existing table an resync db
-  // { force: true }
+  { force: true }
 ).then(() => {
   useRoutes();
 });
@@ -42,6 +42,7 @@ app.get('/', (req, res) => {
 function useRoutes() {
   console.log('use routes');
   require('./routes/categories.routes')(app);
+  require('./routes/products/productImages.routes')(app);
   require('./routes/products/dimensions.routes')(app);
   require('./routes/products/brands.routes')(app);
   require('./routes/products/materials.routes')(app);

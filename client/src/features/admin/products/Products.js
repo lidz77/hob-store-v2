@@ -34,6 +34,10 @@ import{
   selectMaterials,
   deleteMaterial,
   addMaterial,
+  uploadImages,
+  selectImagesList,
+  setImagesList,
+  clearImagesList
 } from '../products/productPropsSlice'
 
 const Products = () => {
@@ -121,6 +125,10 @@ const Products = () => {
         addMaterial={addMaterial}
         selectProductDetails={selectProductDetails}
         selectCategories={selectCategories}
+        uploadImages={uploadImages}
+        selectImagesList={selectImagesList}
+        setImagesList={setImagesList}
+        clearImagesList={clearImagesList}
         />
     </main>
   )

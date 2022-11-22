@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import FormControl from '@mui/material/FormControl';
 import FormGroup from '@mui/material/FormGroup';
@@ -15,7 +15,10 @@ import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import DialogTitle from '@mui/material/DialogTitle';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid';
 import ProductProperties from '../../../components/ProductProperties';
+import ImagesUploader from '../../../components/ImagesUploader';
 import {CirclePicker} from 'react-color';
 
 
@@ -37,13 +40,19 @@ const ProductDetails = ({
   selectMaterials,
   deleteMaterial,
   addMaterial,
-  selectCategories
+  selectCategories,
+  clearImagesList,
+  selectImagesList,
+  uploadImages,
+  setImagesList
 }) => {
+  const dispatch = useDispatch();
   const productDetails = useSelector(selectProductDetails);
   const dimensionsList = useSelector(selectDimensions);
   const brandsList = useSelector(selectBrands);
   const materialsList = useSelector(selectMaterials);
   const categoriesList = useSelector(selectCategories);
+  const imagesList = useSelector(selectImagesList);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState(0);
@@ -53,7 +62,8 @@ const ProductDetails = ({
   const [brandId, setBrandId] = useState(null);
   const [materialId, setMaterialId] = useState(null);
   const [color, setColor] = useState('#f795548');
-
+  const [images, setImages] = useState(undefined);
+  const [previewImages, setPreviewImages] = useState([]);
 
   const clearDetailsAndCloseDialog = () => {
     setEditMode(false);
@@ -67,6 +77,7 @@ const ProductDetails = ({
     setPrice(0);
     handleDialog(false);
     handleSetProductDetails({});
+    clearInput();
   }
 
 
@@ -122,18 +133,43 @@ const ProductDetails = ({
     setCategoryId(id);
   }
 
+  const clearInput = () => {
+    setImages(undefined);
+    setPreviewImages([]);
+    dispatch(clearImagesList());
+  }
+
+  const handleUploadImages = () => {
+    console.log(images);
+    dispatch(uploadImages(images));
+  }
+
+  const handleSelectFiles = (e) => {
+    clearInput();
+    let files = e.target.files;
+    console.log(Object.values(files));
+    setPreviewImages(Object.values(files));
+    setImages(files);
+    Array.prototype.forEach.call(files, item => {
+      dispatch(setImagesList({
+        percentage: 0,
+        name: item.name
+      }))
+    })
+  }
+
   return (
     <Dialog
       open={openDialog}
       >
       <DialogTitle
-        sx={{
-          m: 0,
-          p: 2,
-          padding: (theme) => theme.spacing(2),
-        }}
-        >
-         Add new product {dimensionId}
+            sx={{
+              m: 0,
+              p: 2,
+              padding: (theme) => theme.spacing(2),
+            }}
+          >
+         Add new product
         <IconButton
           sx={{
             position: 'absolute',
@@ -146,31 +182,49 @@ const ProductDetails = ({
           <CloseIcon />
         </IconButton>
       </DialogTitle>
-      <form id="product-details"
-        onSubmit={handleSubmit}
-        >
+    <form id="product-details"
+      onSubmit={handleSubmit}
+      >
+      <Grid container spacing={2}>
+        <Grid item xs={12} sm container>
+          <Grid item xs container direction="column" spacing={2}>
+            <Grid item xs>
+              <FormControl>
+                <InputLabel htmlFor="product-name">Name: </InputLabel>
+                <Input
+                  id="product-name"
+                  aria-describedby="my-helper-text"
+                  required
+                  value={title || ''}
+                  onChange={(e)=>setTitle(e.target.value)}
+                  />
+              </FormControl>
+              <FormControl>
+                  <InputLabel htmlFor="product-description">Description</InputLabel>
+                  <Input
+                    id="product-description"
+                    aria-describedby="my-helper-text"
+                    value={description || ''}
+                    onChange={(e)=>setDescription(e.target.value)}
+                    />
+              </FormControl>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item>
+          <ImagesUploader
+            handleSelectFiles={handleSelectFiles}
+            handleUploadImages={handleUploadImages}
+            previewImages={previewImages}
+            imagesList={imagesList}
+            />
+        </Grid>
+      </Grid>
         <Box sx={{flexGrow : 1}} />
         <FormGroup>
-          <FormControl>
-            <InputLabel htmlFor="product-name">Name: </InputLabel>
-            <Input
-              id="product-name"
-              aria-describedby="my-helper-text"
-              required
-              value={title || ''}
-              onChange={(e)=>setTitle(e.target.value)}
-              />
-          </FormControl>
+
           <Box sx={{flexGrow : 5}} />
-          <FormControl>
-              <InputLabel htmlFor="product-description">Description</InputLabel>
-              <Input
-                id="product-description"
-                aria-describedby="my-helper-text"
-                value={description || ''}
-                onChange={(e)=>setDescription(e.target.value)}
-                />
-          </FormControl>
+
           <FormControlLabel
             control={
               <Switch
@@ -221,6 +275,7 @@ const ProductDetails = ({
             color={color || "0fff"}
             onChange={(color)=> setColor(color) }
             />
+
           <FormControl>
               <BottomNavigation
                 showLabels

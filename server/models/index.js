@@ -25,6 +25,7 @@ db.products = require('./products/products.model')(sequelize, Sequelize);
 db.dimensions = require('./products/dimensions.model')(sequelize, Sequelize);
 db.brands = require('./products/brands.model')(sequelize, Sequelize);
 db.materials = require('./products/materials.model')(sequelize, Sequelize);
+db.productImages = require('./products/productImages.model')(sequelize, Sequelize);
 //relationship
 db.categories.hasMany(db.products, {
   foreignKey: 'categoryId'
@@ -42,6 +43,11 @@ db.materials.hasMany(db.products, {
   foreignKey: 'materialId'
 });
 db.products.belongsTo(db.materials);
+db.products.hasMany(db.productImages, {
+  foreignKey: 'productId',
+  onDelete: 'CASCADE'
+});
+db.productImages.belongsTo(db.products);
 
 // db.products.belongsToMany(db.dimensions, {
 //   through: 'product_dimension',

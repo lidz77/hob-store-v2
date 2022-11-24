@@ -154,6 +154,10 @@ const productPropsSlice = createSlice({
     hasError: false
   },
   reducers: {
+    removeImageFromList: (state, action) => {
+      console.log(action.payload);
+      state.imagesList = state.imagesList.filter((item, index) => { return index !== action.payload });
+    },
     setProgressUpload: (state, action) => {
       const payload = action.payload;
       console.log(payload);
@@ -322,7 +326,8 @@ export const selectImagesList = (state) => {
 export const {
   setImagesList,
   clearImagesList,
-  setProgressUpload
+  setProgressUpload,
+  removeImageFromList
 } = productPropsSlice.actions;
 
 export default productPropsSlice.reducer;

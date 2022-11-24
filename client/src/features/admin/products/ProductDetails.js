@@ -5,6 +5,7 @@ import FormControl from '@mui/material/FormControl';
 import FormGroup from '@mui/material/FormGroup';
 import InputLabel from '@mui/material/InputLabel';
 import Input from '@mui/material/Input';
+import TextareaAutosize from '@mui/material/TextareaAutosize';
 import Box from '@mui/material/Box';
 import DoneIcon from '@mui/icons-material/Done';
 import Dialog from '@mui/material/Dialog';
@@ -15,12 +16,15 @@ import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import DialogTitle from '@mui/material/DialogTitle';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
-import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
+import Slide from '@mui/material/Slide';
 import ProductProperties from '../../../components/ProductProperties';
 import ImagesUploader from '../../../components/ImagesUploader';
 import {CirclePicker} from 'react-color';
 
+const Transition = React.forwardRef(function Transition(props, ref){
+  return <Slide direction="up" ref={ref} {...props} />;
+})
 
 const ProductDetails = ({
   openDialog,
@@ -44,7 +48,8 @@ const ProductDetails = ({
   clearImagesList,
   selectImagesList,
   uploadImages,
-  setImagesList
+  setImagesList,
+  removeImageFromList
 }) => {
   const dispatch = useDispatch();
   const productDetails = useSelector(selectProductDetails);
@@ -139,6 +144,19 @@ const ProductDetails = ({
     dispatch(clearImagesList());
   }
 
+  const handleRemoveImage = (idx) => {
+    const dt = new DataTransfer();
+    for (let i = 0; i < images.length; i++) {
+      const image = images[i]
+      if (idx !== i){
+        dt.items.add(image) // here you exclude the file. thus removing it.
+      }
+    }
+    setImages(dt.files);
+    setPreviewImages(previewImages => previewImages.filter((item, index) => { return index !== idx }));
+    dispatch(removeImageFromList(idx));
+  }
+
   const handleUploadImages = () => {
     console.log(images);
     dispatch(uploadImages(images));
@@ -147,6 +165,7 @@ const ProductDetails = ({
   const handleSelectFiles = (e) => {
     clearInput();
     let files = e.target.files;
+    console.log(Object.keys(files));
     console.log(Object.values(files));
     setPreviewImages(Object.values(files));
     setImages(files);
@@ -161,6 +180,9 @@ const ProductDetails = ({
   return (
     <Dialog
       open={openDialog}
+      fullScreen
+      onClose={clearDetailsAndCloseDialog}
+      TransitionComponent={Transition}
       >
       <DialogTitle
             sx={{
@@ -199,15 +221,71 @@ const ProductDetails = ({
                   onChange={(e)=>setTitle(e.target.value)}
                   />
               </FormControl>
+              <br />
               <FormControl>
-                  <InputLabel htmlFor="product-description">Description</InputLabel>
-                  <Input
+                  <TextareaAutosize
                     id="product-description"
-                    aria-describedby="my-helper-text"
+                    maxrow={6}
+                    placeholder="Descriptions"
                     value={description || ''}
                     onChange={(e)=>setDescription(e.target.value)}
                     />
               </FormControl>
+            </Grid>
+            <Grid item xs>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={available || false}
+                    onChange={()=>setAvailable(!available)}
+                    />} label="Available"
+                />
+              <ProductProperties
+                propsList={dimensionsList}
+                deleteProp={deleteDimension}
+                addProp={addDimension}
+                handlePickProp={handlePickDimension}
+                propName="Dimension"
+                propDetails={productDetails.dimension ? productDetails.dimension : {}}
+                />
+            </Grid>
+            <Grid item xs>
+              <Box sx={{flexGrow : 5}} />
+              <ProductProperties
+                propsList={brandsList}
+                deleteProp={deleteBrand}
+                addProp={addBrand}
+                handlePickProp={handlePickBrand}
+                propName="Brand"
+                propDetails={productDetails.brand ? productDetails.brand : {}}
+                />
+              <ProductProperties
+                propsList={materialsList}
+                deleteProp={deleteMaterial}
+                addProp={addMaterial}
+                handlePickProp={handlePickMaterial}
+                propName="Material"
+                propDetails={productDetails.material ? productDetails.material : {}}
+                />
+              <ProductProperties
+                propsList={categoriesList}
+                handlePickProp={handlePickCategory}
+                propName="Category"
+                propDetails={productDetails.category ? productDetails.category : {}}
+                />
+              <FormControl>
+                  <InputLabel htmlFor="product-price">Price</InputLabel>
+                  <Input
+                    id="product-price"
+                    aria-describedby="my-helper-text"
+                    value={price || 0}
+                    onChange={(e)=>setPrice(e.target.value)}
+                    />
+              </FormControl>
+              <CirclePicker
+                color={color || "0fff"}
+                onChange={(color)=> setColor(color) }
+                />
             </Grid>
           </Grid>
         </Grid>
@@ -217,65 +295,12 @@ const ProductDetails = ({
             handleUploadImages={handleUploadImages}
             previewImages={previewImages}
             imagesList={imagesList}
+            handleRemoveImage={handleRemoveImage}
             />
         </Grid>
       </Grid>
         <Box sx={{flexGrow : 1}} />
         <FormGroup>
-
-          <Box sx={{flexGrow : 5}} />
-
-          <FormControlLabel
-            control={
-              <Switch
-                checked={available || false}
-                onChange={()=>setAvailable(!available)}
-                />} label="Available"
-            />
-          <ProductProperties
-            propsList={dimensionsList}
-            deleteProp={deleteDimension}
-            addProp={addDimension}
-            handlePickProp={handlePickDimension}
-            propName="Dimension"
-            propDetails={productDetails.dimension ? productDetails.dimension : {}}
-            />
-          <ProductProperties
-            propsList={brandsList}
-            deleteProp={deleteBrand}
-            addProp={addBrand}
-            handlePickProp={handlePickBrand}
-            propName="Brand"
-            propDetails={productDetails.brand ? productDetails.brand : {}}
-            />
-          <ProductProperties
-            propsList={materialsList}
-            deleteProp={deleteMaterial}
-            addProp={addMaterial}
-            handlePickProp={handlePickMaterial}
-            propName="Material"
-            propDetails={productDetails.material ? productDetails.material : {}}
-            />
-          <ProductProperties
-            propsList={categoriesList}
-            handlePickProp={handlePickCategory}
-            propName="Category"
-            propDetails={productDetails.category ? productDetails.category : {}}
-            />
-            <FormControl>
-                <InputLabel htmlFor="product-description">Price</InputLabel>
-                <Input
-                  id="product-price"
-                  aria-describedby="my-helper-text"
-                  value={price || 0}
-                  onChange={(e)=>setPrice(e.target.value)}
-                  />
-            </FormControl>
-          <CirclePicker
-            color={color || "0fff"}
-            onChange={(color)=> setColor(color) }
-            />
-
           <FormControl>
               <BottomNavigation
                 showLabels

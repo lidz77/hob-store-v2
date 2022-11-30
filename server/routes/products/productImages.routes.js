@@ -5,7 +5,8 @@ module.exports = (app) => {
 
   productsImagesRouter.get('/', productImagesController.findAll);
   productsImagesRouter.get('/:id', productImagesController.findById);
-  productsImagesRouter.post('/', productImagesController.uploadImages)
+  productsImagesRouter.post('/', productImagesController.uploadImages);
+  productsImagesRouter.put('/',productImagesController.update);
   // productsImagesRouter.post('/', uploadImages.single('file'), productImagesController.uploadImage)
   app.use('/api/products/images', productsImagesRouter);
 };

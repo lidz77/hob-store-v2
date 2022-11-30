@@ -25,7 +25,7 @@ const db = require('./models');
 // });
 db.sequelize.sync(
   // drop existing table an resync db
-  { force: true }
+  // { force: true }
 ).then(() => {
   useRoutes();
 });

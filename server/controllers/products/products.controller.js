@@ -120,7 +120,7 @@ exports.delete = (req, res) => {
 exports.update = (req, res) => {
   const id = req.params.id;
   const data = req.body.data;
-  console.log(req.body);
+  console.log(req);
   Products.update(data, {
     where: {
       id: id
@@ -136,6 +136,9 @@ exports.update = (req, res) => {
         }
         if(data.materialId !== 0){
           result.setMaterial(data.materialId);
+        }
+        if(data.imageIds !== 0){
+          result.setImage(data.imageIds);
         }
       }).then(Products.findByPk(id,{
         include: relationalArray

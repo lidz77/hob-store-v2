@@ -4,6 +4,7 @@ import {styled} from '@mui/material/styles';
 import {Box} from '@mui/material';
 import UploadIcon from '@mui/icons-material/Upload';
 import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
 import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
 import Grid from '@mui/material/Grid';
@@ -38,22 +39,26 @@ const ImagesUploader = ({
     <div className="form-group">
       <Box sx={{display: 'flex', alignItems: 'center'}}>
         <InputLabel
+          sx={{
+            background: '#4CAF50'
+          }}
           htmlFor="product-file"
           >
           {previewImages.length ? previewImages.length +' file is selected'  : 'Choose image(s)'}
         </InputLabel>
-        <IconButton
+        <Button
           size="large"
-          aria-label="Add new category"
+          aria-label="Upload images"
           color="inherit"
           onClick={handleUploadImages}
           sx={{
             float: 'right'
           }}
+          disabled={imagesList.length === 0}
           >
           Upload
           <UploadIcon />
-        </IconButton>
+        </Button>
         <Input
           id="product-file"
           type="file"

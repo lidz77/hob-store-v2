@@ -100,21 +100,28 @@ const ProductProperties = ({
              }}
            >
              {item.name}
-             <Box sx={{display: {xs: 'none', md: 'flex', }}}>
-               <IconButton
-                 size="large"
-                 aria-label={"Add new" + propName}
-                 color="inherit"
-                 onClick={(e)=>{
-                   e.preventDefault();
-                   handleDelete(item.id);
-                 }}
-                 >
-                 <Remove />
-               </IconButton>
+             <Box sx={{
+                 display: {xs: 'none', md: 'flex', },
+                 right: '10px',
+                 position: 'absolute'
+               }}>
+               {(propName !== 'Category')&&(
+                 <IconButton
+                   size="large"
+                   aria-label={"Add new" + propName}
+                   color="inherit"
+                   onClick={(e)=>{
+                     e.preventDefault();
+                     handleDelete(item.id);
+                   }}
+                   >
+                   <Remove />
+                 </IconButton>
+               )}
              </Box>
            </MenuItem>
          ))}
+         {(propName !== 'Category') && (
          <MenuItem
            key={'new'+{propName}}
            >
@@ -146,6 +153,7 @@ const ProductProperties = ({
              </IconButton>
            </Box>
          </MenuItem>
+         )}
        </Select>
      </FormControl>
    </div>

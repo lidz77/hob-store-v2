@@ -58,6 +58,28 @@ exports.uploadImages = async (req, res) => {
   }
 }
 
+
+//unneccesary
+exports.update = (req, res) => {
+  const idArray = req.body.idArray;
+  const productId = req.body.productId;
+  console.log(req);
+  ProductImages.update({productId: productId}, {
+    where: {
+      id: idArray
+    }
+  }).then((result) => {
+    console.log(result);
+    res.send({
+      message: `IDs ${idArray} has been added to product ${productId}`
+    })
+  }).catch((err) => {
+    res.status(500).send({
+      message: `Error occurs on adding photos to product, ${err}`
+    })
+  });
+}
+
 exports.findById = (req, res) => {
   const id = req.params.id;
   ProductImages.findByPk(id).then((result) => {

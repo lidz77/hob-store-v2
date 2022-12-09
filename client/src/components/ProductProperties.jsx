@@ -80,7 +80,6 @@ const ProductProperties = ({
            if (selected.length === 0) {
              return <em>Select {propName}</em>;
            }
-           console.log(selected)
            return selected
          }}
          MenuProps={MenuProps}

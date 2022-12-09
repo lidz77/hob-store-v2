@@ -5,6 +5,7 @@
 /.pnp
 .pnp.js
 /resources/static/assets
+/config/db.config.js
 
 # testing
 /coverage

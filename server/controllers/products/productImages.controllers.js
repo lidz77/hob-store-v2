@@ -1,3 +1,4 @@
+const helper = require('../helper');
 const fs = require('fs');
 const db = require('../../models');
 const fr = require('filereader');
@@ -5,13 +6,13 @@ const uploadMultipleImages = require('../../middlewares/upload');
 const ProductImages = db.productImages;
 
 //need test this function
-const convertUrl = (blob) => {
-  return btoa(new Uint8Array(blob).reduce(
-    function (data, byte){
-      return data + String.fromCharCode(byte);
-    }, ''
-  ))
-}
+// const helper.convertUrl = (blob) => {
+//   return btoa(new Uint8Array(blob).reduce(
+//     function (data, byte){
+//       return data + String.fromCharCode(byte);
+//     }, ''
+//   ))
+// }
 
 exports.uploadImages = async (req, res) => {
   try {
@@ -33,10 +34,13 @@ exports.uploadImages = async (req, res) => {
           __basedir + '/resources/static/assets/tmp/' + result.name,
           result.data
         );
-        console.log('result ne ' + result.id);
+        console.log(result.id);
+        return res.send({
+          message: 'File has been uploaded',
+          id: result.id
+        });
       });
     });
-    return res.send('File has been uploaded');
 
     // ProductImages.create({
     //   type: req.file.mimetype,
@@ -59,7 +63,7 @@ exports.uploadImages = async (req, res) => {
 }
 
 
-//unneccesary
+//unneccesary, update is called at product main controller
 exports.update = (req, res) => {
   const idArray = req.body.idArray;
   const productId = req.body.productId;
@@ -85,7 +89,7 @@ exports.findById = (req, res) => {
   ProductImages.findByPk(id).then((result) => {
     if (result) {
       let alt = result.name;
-      let url = convertUrl(result.data);
+      let url = helper.convertUrl(result.data);
       res.send({url, alt});
     } else {
       res.status(404).send({
@@ -104,7 +108,7 @@ exports.findAll = (req, res) => {
     let imagesInfo = [];
     result.map((item) => {
       let alt = item.name;
-      let url = convertUrl(item.data);
+      let url = helper.convertUrl(item.data);
     });
     imagesInfo.push({alt, url});
     res.send(imagesInfo);

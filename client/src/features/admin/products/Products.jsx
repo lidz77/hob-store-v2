@@ -38,7 +38,8 @@ import{
   selectImagesList,
   setImagesList,
   clearImagesList,
-  removeImageFromList
+  removeImageFromList,
+  selectImagesIdsArray
 } from '../products/productPropsSlice'
 
 const Products = () => {
@@ -131,6 +132,7 @@ const Products = () => {
         setImagesList={setImagesList}
         clearImagesList={clearImagesList}
         removeImageFromList={removeImageFromList}
+        selectImagesIdsArray={selectImagesIdsArray}
         />
     </main>
   )

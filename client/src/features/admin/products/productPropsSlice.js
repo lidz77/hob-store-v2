@@ -2,24 +2,33 @@ import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import ProductPropsDataService from '../../../services/products/productprops.services';
 import ProductImagesService from '../../../services/products/productimages.services';
 
+const uploadSingle = async (files, ThunkAPI) => {
+  let imgIdsArray = [];
+
+  for(let i = 0; i< files.length; i++){
+    await ProductImagesService.uploadSingle(files[i], (e) => {
+      ThunkAPI.dispatch(setProgressUpload({
+        idx: i,
+        percentage: Math.round((100*e.loaded) /e.total)
+      }));
+    }).then((result) => {
+      imgIdsArray = [...imgIdsArray, result.data.id];
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
+  return Promise.all(imgIdsArray);
+}
 
 export const uploadImages = createAsyncThunk(
   'products/productProps/uploadImages',
   async (files, ThunkAPI) => {
-    // using uploadSingle for retrieving individual uploading progression
-    for(let i = 0; i< files.length; i++){
-      ProductImagesService.uploadSingle(files[i], (e) => {
-        ThunkAPI.dispatch(setProgressUpload({
-          idx: i,
-          percentage: Math.round((100*e.loaded) /e.total)
-        }));
-      }).then((result) => {
-        console.log(result);
-        return result.data;
-      }).catch((err) => {
-        console.log(err);
-      });
-    }
+    const res = await uploadSingle(files, ThunkAPI).then((result) => {
+      return result;
+    }).catch((err) => {
+      console.log(err)
+    });
+    return res;
     //upload multiple files at once
     // ProductImagesService.uploadMultiple(files, (e) => {
     //   console.log(e);
@@ -150,6 +159,7 @@ const productPropsSlice = createSlice({
     brandsList:[],
     materialsList:[],
     imagesList:[],
+    imageIdsArray: [],
     isLoading: true,
     hasError: false
   },
@@ -160,7 +170,6 @@ const productPropsSlice = createSlice({
     },
     setProgressUpload: (state, action) => {
       const payload = action.payload;
-      console.log(payload);
       state.imagesList[payload.idx].percentage = payload.percentage;
     },
     setImagesList: (state, action) => {
@@ -291,11 +300,12 @@ const productPropsSlice = createSlice({
       state.hasError = true;
     },
     [uploadImages.pending]: (state, action) => {
-      console.log(action.payload);
       state.isLoading = true;
       state.hasError = false;
     },
     [uploadImages.fulfilled]: (state, action) => {
+      console.log(action.payload);
+      state.imageIdsArray = action.payload;
       state.isLoading = false;
       state.hasError = false;
     },
@@ -321,6 +331,9 @@ export const selectMaterials = (state) => {
 }
 export const selectImagesList = (state) => {
   return state.productProps.imagesList;
+}
+export const selectImagesIdsArray = (state) => {
+  return state.productProps.imageIdsArray;
 }
 
 export const {

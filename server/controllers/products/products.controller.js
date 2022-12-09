@@ -1,9 +1,11 @@
 const db = require('../../models');
+const helper = require('../helper');
 const Products = db.products;
 const Categories = db.categories;
 const Dimensions = db.dimensions;
 const Brands = db.brands;
 const Materials = db.materials;
+const ProductImages = db.productImages;
 
 const relationalArray = [
   {
@@ -37,6 +39,11 @@ const relationalArray = [
     //   attributes: []
     // }
   },
+  // {
+  //   model: ProductImages,
+  //   as: 'productImages',
+  //   attributes: ['data']
+  // }
 ];
 
 exports.create = (req, res) => {
@@ -51,14 +58,26 @@ exports.create = (req, res) => {
   Products.create(req.body).then((productResult) => {
     console.log(req.body);
     productId = productResult.id;
-    Products.findByPk(productId).then(
+    ProductImages.update({productId: productId},{
+      where: {
+        id: req.body.productImagesId
+      }
+    }).then(
       Products.findByPk(productId, {
         include: relationalArray
       }).then((result) => {
-        console.log(productId);
+        console.log(result);
         res.send(result);
       })
     )
+    // Products.findByPk(productId).then(
+    //   Products.findByPk(productId, {
+    //     include: relationalArray
+    //   }).then((result) => {
+    //     console.log(result);
+    //     res.send(result);
+    //   })
+    // )
   }).catch((err) => {
     res.status(500).send({
       message: err.message || 'Error while creating new product'
@@ -82,8 +101,16 @@ exports.findAll = (req, res) => {
 exports.findById = (req, res) => {
   const productId = req.params.id;
   Products.findByPk(productId, {
-    include: relationalArray
+    include: [
+      ...relationalArray,
+      {
+        model: ProductImages,
+        as: 'productImages',
+        attributes: ['data']
+      }
+    ]
   }).then((result) => {
+    console.log(result);
     res.send(result);
   }).catch((err) => {
     console.log('Error while finding dimension', err);
@@ -137,9 +164,9 @@ exports.update = (req, res) => {
         if(data.materialId !== 0){
           result.setMaterial(data.materialId);
         }
-        if(data.imageIds !== 0){
-          result.setImage(data.imageIds);
-        }
+        // if(data.imageIds !== 0){
+        //   result.setImage(data.imageIds);
+        // }
       }).then(Products.findByPk(id,{
         include: relationalArray
       }).then((result) => {

@@ -48,6 +48,7 @@ const ProductDetails = ({
   selectCategories,
   clearImagesList,
   selectImagesList,
+  selectImagesIdsArray,
   uploadImages,
   setImagesList,
   removeImageFromList
@@ -59,6 +60,7 @@ const ProductDetails = ({
   const materialsList = useSelector(selectMaterials);
   const categoriesList = useSelector(selectCategories);
   const imagesList = useSelector(selectImagesList);
+  const imageIdsArray = useSelector(selectImagesIdsArray);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState(0);
@@ -69,7 +71,6 @@ const ProductDetails = ({
   const [materialId, setMaterialId] = useState(null);
   const [color, setColor] = useState('#f795548');
   const [images, setImages] = useState(undefined);
-  const [imageIds, setImageIds] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
 
   const clearDetailsAndCloseDialog = () => {
@@ -114,7 +115,8 @@ const ProductDetails = ({
       materialId: materialId,
       categoryId: categoryId,
       price: price,
-      color: color.hex
+      color: color.hex,
+      productImagesId: imageIdsArray
     }
 
     if(editMode){
@@ -160,15 +162,15 @@ const ProductDetails = ({
   }
 
   const handleUploadImages = () => {
-    console.log(images);
+    // console.log(images);
     dispatch(uploadImages(images));
   }
 
   const handleSelectFiles = (e) => {
     clearInput();
     let files = e.target.files;
-    console.log(Object.keys(files));
-    console.log(Object.values(files));
+    //console.log(Object.keys(files));
+    //console.log(Object.values(files));
     setPreviewImages(Object.values(files));
     setImages(files);
     Array.prototype.forEach.call(files, item => {
@@ -181,7 +183,7 @@ const ProductDetails = ({
 
   return (
     <Dialog
-      open={true}
+      open={openDialog}
       fullScreen
       onClose={clearDetailsAndCloseDialog}
       TransitionComponent={Transition}
@@ -307,7 +309,6 @@ const ProductDetails = ({
             previewImages={previewImages}
             imagesList={imagesList}
             handleRemoveImage={handleRemoveImage}
-            setImageIds={setImageIds}
             />
         </Grid>
       </Grid>

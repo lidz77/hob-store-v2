@@ -11,7 +11,7 @@ import Grid from "@mui/material/Grid";
 import LinearProgressWithLabel from "./LinearProgressWithLabel";
 import LoadingBackdrop from "./LoadingBackdrop";
 import ImagesGrid from "./ImagesGrid";
-import { loadImages } from "../features/admin/products/productPropsSlice";
+import { loadImages } from "../../features/admin/products/productPropsSlice";
 
 const ImagesUploader = ({
   handleSelectFiles,

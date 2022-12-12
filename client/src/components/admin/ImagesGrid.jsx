@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import { styled } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
-import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
 import DeleteIcon from "@mui/icons-material/Delete";

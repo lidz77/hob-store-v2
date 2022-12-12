@@ -20,9 +20,9 @@ import IconButton from "@mui/material/IconButton";
 import Grid from "@mui/material/Grid";
 import Slide from "@mui/material/Slide";
 import Typography from "@mui/material/Typography";
-import ProductProperties from "../../../components/ProductProperties";
-import ImagesUploader from "../../../components/ImagesUploader";
-import LoadingBackdrop from "../../../components/LoadingBackdrop";
+import ProductProperties from "../../../components/admin/ProductProperties";
+import ImagesUploader from "../../../components/admin/ImagesUploader";
+import LoadingBackdrop from "../../../components/admin/LoadingBackdrop";
 import { CirclePicker } from "react-color";
 
 const Transition = React.forwardRef(function Transition(props, ref) {

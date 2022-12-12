@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import ProductToolbar from "../../../components/ProductToolbar";
+import ProductToolbar from "../../../components/admin/ProductToolbar";
 import ProductDetails from "./ProductDetails";
 import ProductsList from "./ProductsList";
 import {

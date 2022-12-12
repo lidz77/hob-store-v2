@@ -1,23 +1,23 @@
-import React,{useState} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import {
-        deleteCategory,
-        setSearchTerm,
-        selectVisibleCategories,
-        selectedItemsList,
-        selectCategoryDetails,
-        selectSearchTerm,
-        loadCategories,
-        isLoadingCategories,
-        selectItem,
-        setCategoryDetails,
-        updateCategory,
-        addCategory,
-      } from './categoriesSlice';
-import CategoresList from './CategoriesList';
-import Box from '@mui/material/Box';
-import CategoryDetails from './CategoryDetails'
-import CategoryToolbar from '../../../components/CategoryToolbar';
+  deleteCategory,
+  setSearchTerm,
+  selectVisibleCategories,
+  selectedItemsList,
+  selectCategoryDetails,
+  selectSearchTerm,
+  loadCategories,
+  isLoadingCategories,
+  selectItem,
+  setCategoryDetails,
+  updateCategory,
+  addCategory,
+} from "./categoriesSlice";
+import CategoresList from "./CategoriesList";
+import Box from "@mui/material/Box";
+import CategoryDetails from "./CategoryDetails";
+import CategoryToolbar from "../../../components/admin/CategoryToolbar";
 
 const Categories = () => {
   const dispatch = useDispatch();
@@ -31,35 +31,34 @@ const Categories = () => {
 
   const handleAdd = (data) => {
     dispatch(addCategory(data));
-  }
+  };
 
   const handleUpdate = (id, data) => {
-    dispatch(updateCategory(id, data))
-  }
+    dispatch(updateCategory(id, data));
+  };
 
   const handleDelete = (idArray) => {
-    if(!Array.isArray(idArray)){
+    if (!Array.isArray(idArray)) {
       idArray = [idArray];
     }
     dispatch(deleteCategory(idArray));
-  }
+  };
 
   const handleDialog = () => {
     setOpenDialog(!openDialog);
-  }
+  };
 
   const handleSearchTerm = (e) => {
     dispatch(setSearchTerm(e.target.value));
-  }
-
+  };
 
   const handleSelectItem = (item) => {
     dispatch(selectItem(item));
-  }
+  };
 
   const handleSetDetails = (item) => {
     dispatch(setCategoryDetails(item));
-  }
+  };
 
   return (
     <main>
@@ -71,7 +70,7 @@ const Categories = () => {
           handleDelete={handleDelete}
           selectedItems={selectedItems}
           setEditMode={setEditMode}
-          />
+        />
       </Box>
       <Box>
         <CategoresList
@@ -83,7 +82,7 @@ const Categories = () => {
           handleSelectItem={handleSelectItem}
           handleSetDetails={handleSetDetails}
           setEditMode={setEditMode}
-          />
+        />
       </Box>
       <CategoryDetails
         open={openDialog}
@@ -93,10 +92,9 @@ const Categories = () => {
         handleAdd={handleAdd}
         handleUpdate={handleUpdate}
         editMode={editMode}
-        />
+      />
     </main>
-  )
-}
+  );
+};
 
-
-export default Categories
+export default Categories;

@@ -1,9 +1,9 @@
-import React,{useState, useEffect} from 'react';
-import {useDispatch} from 'react-redux';
-import {useSelector} from 'react-redux';
-import ProductToolbar from '../../../components/ProductToolbar';
-import ProductDetails from './ProductDetails';
-import ProductsList from './ProductsList';
+import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import ProductToolbar from "../../../components/ProductToolbar";
+import ProductDetails from "./ProductDetails";
+import ProductsList from "./ProductsList";
 import {
   loadProducts,
   createProduct,
@@ -13,15 +13,16 @@ import {
   selectVisibleProducts,
   setSearchTerm,
   selectProductDetails,
-  setProductDetails,
   selectItem,
-  selectedItems
-} from './productsSlice';
+  selectedItems,
+  findProductDetails,
+} from "./productsSlice";
 import {
   loadCategories,
-  selectCategories
-} from '../categories/categoriesSlice';
-import{
+  selectCategories,
+} from "../categories/categoriesSlice";
+import {
+  isLoadingProps,
   loadDimensions,
   selectDimensions,
   deleteDimension,
@@ -35,12 +36,13 @@ import{
   deleteMaterial,
   addMaterial,
   uploadImages,
-  selectImagesList,
-  setImagesList,
-  clearImagesList,
-  removeImageFromList,
-  selectImagesIdsArray
-} from '../products/productPropsSlice'
+  selectImagesInfo,
+  setImagesInfo,
+  clearImagesInfo,
+  removeImageInfo,
+  selectImagesIdsArray,
+  selectImages,
+} from "./productPropsSlice";
 
 const Products = () => {
   const dispatch = useDispatch();
@@ -58,35 +60,35 @@ const Products = () => {
     dispatch(loadDimensions());
     dispatch(loadBrands());
     dispatch(loadMaterials());
-    console.log('load props succeed');
-  }, [dispatch])
+    console.log("load props succeed");
+  }, [dispatch]);
 
   const handleDialog = () => {
     setOpenDialog(!openDialog);
-  }
+  };
 
   const handleAddProduct = (newProductInfo) => {
     dispatch(createProduct(newProductInfo));
-  }
+  };
 
   const handleUpdateProduct = (id, data) => {
     dispatch(updateProduct(id, data));
-  }
+  };
 
-  const handleSetProductDetails = (item) => {
-    dispatch(setProductDetails(item));
-  }
+  const handleSetProductDetails = (id) => {
+    dispatch(findProductDetails(id));
+  };
 
   const handleSelectItem = (item) => {
     dispatch(selectItem(item));
-  }
+  };
 
   const handleDeleteProduct = (idArray) => {
-    if(!Array.isArray(idArray)){
+    if (!Array.isArray(idArray)) {
       idArray = [idArray];
     }
     dispatch(deleteProduct(idArray));
-  }
+  };
 
   return (
     <main>
@@ -95,18 +97,19 @@ const Products = () => {
         setSearchTerm={setSearchTerm}
         handleDeleteProduct={handleDeleteProduct}
         selectedItemsList={selectedItemsList}
-        />
+      />
       <ProductsList
         productsIsLoading={productsIsLoading}
         filteredProductsList={filteredProductsList}
-        setProductDetails={setProductDetails}
         handleSetProductDetails={handleSetProductDetails}
         setEditMode={setEditMode}
         handleDialog={handleDialog}
         handleDeleteProduct={handleDeleteProduct}
         handleSelectItem={handleSelectItem}
-        />
+      />
       <ProductDetails
+        isLoadingProps={isLoadingProps}
+        productsIsLoading={productsIsLoading}
         openDialog={openDialog}
         handleDialog={handleDialog}
         handleAddProduct={handleAddProduct}
@@ -128,14 +131,15 @@ const Products = () => {
         selectProductDetails={selectProductDetails}
         selectCategories={selectCategories}
         uploadImages={uploadImages}
-        selectImagesList={selectImagesList}
-        setImagesList={setImagesList}
-        clearImagesList={clearImagesList}
-        removeImageFromList={removeImageFromList}
+        selectImagesInfo={selectImagesInfo}
+        setImagesInfo={setImagesInfo}
+        clearImagesInfo={clearImagesInfo}
+        removeImageInfo={removeImageInfo}
         selectImagesIdsArray={selectImagesIdsArray}
-        />
+        selectImages={selectImages}
+      />
     </main>
-  )
-}
+  );
+};
 
-export default Products
+export default Products;

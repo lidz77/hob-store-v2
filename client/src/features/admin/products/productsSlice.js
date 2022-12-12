@@ -1,78 +1,88 @@
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
-import ProductsDataService from '../../../services/products/products.services';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import ProductsDataService from "../../../services/products/products.services";
 
 export const loadProducts = createAsyncThunk(
-  'products/loadProducts',
+  "products/loadProducts",
   async () => {
-    const res = await ProductsDataService.getAll().then((result) => {
-      return result.data;
-    }).catch((err) => {
-      console.log(err);
-    });
+    const res = await ProductsDataService.getAll()
+      .then((result) => {
+        return result.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     return res;
   }
-)
+);
 
 export const createProduct = createAsyncThunk(
-  'products/addProduct',
+  "products/addProduct",
   async (newProductInfo) => {
-    const res = await ProductsDataService.create(newProductInfo).then((result) => {
-      return result.data;
-    }).catch((err) => {
-      console.log(err);
-    });
+    const res = await ProductsDataService.create(newProductInfo)
+      .then((result) => {
+        return result.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     return res;
   }
-)
+);
 
-export const findProduct = createAsyncThunk(
-  'products/findProduct',
+export const findProductDetails = createAsyncThunk(
+  "products/findProductDetails",
   async (id) => {
-    const res = await ProductsDataService.findById(id).then((result) => {
-      console.log(result);
-      return result;
-    }).catch((err) => {
-      console.log(err);
-    });
+    const res = await ProductsDataService.findById(id)
+      .then((result) => {
+        console.log(result.data);
+        return result.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     return res;
   }
-)
+);
 
 export const updateProduct = createAsyncThunk(
-  'products/updateProduct',
-  async ({id, data}) => {
-    const res = await ProductsDataService.update(id, data).then((result) => {
-      console.log(result);
-      return result.data;
-    }).catch((err) => {
-      console.log(err);
-    });
+  "products/updateProduct",
+  async ({ id, data }) => {
+    const res = await ProductsDataService.update(id, data)
+      .then((result) => {
+        console.log(result);
+        return result.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     return res;
   }
-)
+);
 
 export const deleteProduct = createAsyncThunk(
-  'products/deleteProduct',
-  async(idArray) => {
-    const res = await ProductsDataService.delete(idArray).then((result) => {
-      console.log(result);
-      return result.data;
-    }).catch((err) => {
-      console.log(err);
-    });
+  "products/deleteProduct",
+  async (idArray) => {
+    const res = await ProductsDataService.delete(idArray)
+      .then((result) => {
+        console.log(result);
+        return result.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     return res;
   }
-)
+);
 
 const productsSlice = createSlice({
-  name: 'products',
+  name: "products",
   initialState: {
     productDetails: {},
     productsList: [],
     isLoading: true,
     hasError: false,
-    searchTerm: '',
-    selectedItems: []
+    searchTerm: "",
+    selectedItems: [],
   },
   reducers: {
     setSearchTerm: (state, action) => {
@@ -82,8 +92,12 @@ const productsSlice = createSlice({
       state.productDetails = action.payload;
     },
     selectItem: (state, action) => {
-      state.selectedItems.includes(action.payload) ? state.selectedItems =  state.selectedItems.filter(item => item !== action.payload) : state.selectedItems.push(action.payload);
-    }
+      state.selectedItems.includes(action.payload)
+        ? (state.selectedItems = state.selectedItems.filter(
+            (item) => item !== action.payload
+          ))
+        : state.selectedItems.push(action.payload);
+    },
   },
   extraReducers: {
     [loadProducts.pending]: (state, action) => {
@@ -104,7 +118,7 @@ const productsSlice = createSlice({
       state.hasError = false;
     },
     [createProduct.fulfilled]: (state, action) => {
-      state.productsList.push(action.payload)
+      state.productsList.push(action.payload);
       state.isLoading = false;
       state.hasError = false;
     },
@@ -112,17 +126,17 @@ const productsSlice = createSlice({
       state.isLoading = false;
       state.hasError = true;
     },
-    [findProduct.pending]: (state, action) => {
+    [findProductDetails.pending]: (state, action) => {
       state.isLoading = true;
       state.hasError = false;
     },
-    [findProduct.fulfilled]: (state, action) => {
-      // console.log(action.payload);
-      state.productsList.push(action.payload)
+    [findProductDetails.fulfilled]: (state, action) => {
+      console.log(action.payload);
+      state.productDetails = action.payload;
       state.isLoading = false;
       state.hasError = false;
     },
-    [findProduct.rejected]: (state, action) => {
+    [findProductDetails.rejected]: (state, action) => {
       state.isLoading = false;
       state.hasError = true;
     },
@@ -133,11 +147,9 @@ const productsSlice = createSlice({
     [updateProduct.fulfilled]: (state, action) => {
       const res = action.payload.data;
       console.log(res);
-      state.productsList = state.productsList.map(item =>
-        {
-          return item.id === res.id ? item = res.data : item;
-        }
-      );
+      state.productsList = state.productsList.map((item) => {
+        return item.id === res.id ? (item = res.data) : item;
+      });
       state.isLoading = false;
       state.hasError = false;
     },
@@ -150,7 +162,9 @@ const productsSlice = createSlice({
       state.hasError = false;
     },
     [deleteProduct.fulfilled]: (state, action) => {
-      state.productsList = state.productsList.filter(item => !action.payload.idArray.includes(item.id));
+      state.productsList = state.productsList.filter(
+        (item) => !action.payload.idArray.includes(item.id)
+      );
       state.isLoading = false;
       state.hasError = false;
     },
@@ -163,30 +177,30 @@ const productsSlice = createSlice({
 
 export const selectProductDetails = (state) => {
   return state.products.productDetails;
-}
+};
 
 export const selectVisibleProducts = (state) => {
-  return state.products.productsList.filter(item =>
+  return state.products.productsList.filter((item) =>
     item.title.toLowerCase().includes(state.products.searchTerm.toLowerCase())
   );
-}
+};
 
 export const selectSearchTerm = (state) => {
   return state.products.searchTerm;
-}
+};
 
 export const selectedItems = (state) => {
   return state.products.selectedItems;
-}
+};
 
 export const isLoadingProducts = (state) => {
   return state.products.isLoading;
-}
+};
 
 export const {
   setSearchTerm,
   setProductDetails,
-  selectItem
+  selectItem,
 } = productsSlice.actions;
 
 export default productsSlice.reducer;

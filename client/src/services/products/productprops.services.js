@@ -1,18 +1,21 @@
-import http from '../../http-common';
+import http from "../../http-common";
 
 class ProductPropsDataService {
-  getAll(propName){
+  getByProductId(propName, productId) {
+    return http.get(`/products/${propName}/${productId}`);
+  }
+  getAll(propName) {
     return http.get(`/products/${propName}`);
-  };
-  delete(propName, id){
+  }
+  delete(propName, id) {
     return http.delete(`/products/${propName}/${id}`);
-  };
-  update(propName, id, data){
+  }
+  update(propName, id, data) {
     return http.put(`/products/${propName}/${id}`, data);
-  };
-  create(propName, data){
-    return http.post(`/products/${propName}`, data)
-  };
+  }
+  create(propName, data) {
+    return http.post(`/products/${propName}`, data);
+  }
 }
 
 export default new ProductPropsDataService();

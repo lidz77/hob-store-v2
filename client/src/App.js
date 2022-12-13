@@ -7,6 +7,10 @@ import Categories from "./features/admin/categories/Categories";
 import Products from "./features/admin/products/Products";
 import Orders from "./features/admin/orders/Orders";
 import Home from "./app/Home";
+import AboutUs from "./features/home/AboutUs";
+import CookBooks from "./features/home/CookBooks";
+import ProductsList from "./features/home/ProductsList";
+import Main from "./features/home/Main";
 
 function App() {
   return (
@@ -20,7 +24,13 @@ function App() {
           </Route>
         </Routes>
         <Routes>
-          <Route path={ROUTES.homeRoute()} element={<Home />}></Route>
+          <Route path={ROUTES.homeRoute()} element={<Home />}>
+            <Route path={ROUTES.homeRoute()} element={<Main />} />
+            <Route path={ROUTES.productsHome()} element={<ProductsList />} />
+            <Route path={ROUTES.categoriesHome()} element={<ProductsList />} />
+            <Route path={ROUTES.cookBooksHome()} element={<CookBooks />} />
+            <Route path={ROUTES.aboutUsHome()} element={<AboutUs />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </div>

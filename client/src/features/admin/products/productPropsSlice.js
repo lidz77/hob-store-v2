@@ -229,155 +229,156 @@ const productPropsSlice = createSlice({
       state.imagesInfo = [];
     },
   },
-  extraReducers: {
-    [loadImages.pending]: (state, action) => {
-      state.isLoading = true;
-      state.hasError = false;
-    },
-    [loadImages.fulfilled]: (state, action) => {
-      state.imagesList = action.payload;
-      state.isLoading = false;
-      state.hasError = false;
-    },
-    [loadImages.rejected]: (state, action) => {
-      state.isLoading = false;
-      state.hasError = true;
-    },
-    [loadDimensions.pending]: (state, action) => {
-      state.isLoading = true;
-      state.hasError = false;
-    },
-    [loadDimensions.fulfilled]: (state, action) => {
-      state.dimensionsList = action.payload;
-      state.isLoading = false;
-      state.hasError = false;
-    },
-    [loadDimensions.rejected]: (state, action) => {
-      state.isLoading = false;
-      state.hasError = true;
-    },
-    [deleteDimension.pending]: (state, action) => {
-      state.isLoading = true;
-      state.hasError = false;
-    },
-    [deleteDimension.fulfilled]: (state, action) => {
-      console.log(action.payload);
-      state.dimensionsList = deleteById(
-        action.payload.id,
-        state.dimensionsList
-      );
-      state.isLoading = false;
-      state.hasError = false;
-    },
-    [deleteDimension.rejected]: (state, action) => {
-      state.isLoading = false;
-      state.hasError = true;
-    },
-    [addDimension.pending]: (state, action) => {
-      state.isLoading = true;
-      state.hasError = false;
-    },
-    [addDimension.fulfilled]: (state, action) => {
-      state.dimensionsList.push(action.payload);
-      state.isLoading = false;
-      state.hasError = false;
-    },
-    [addDimension.rejected]: (state, action) => {
-      state.isLoading = false;
-      state.hasError = true;
-    },
-    [loadBrands.pending]: (state, action) => {
-      state.isLoading = true;
-      state.hasError = false;
-    },
-    [loadBrands.fulfilled]: (state, action) => {
-      state.brandsList = action.payload;
-      state.isLoading = false;
-      state.hasError = false;
-    },
-    [loadBrands.rejected]: (state, action) => {
-      state.isLoading = false;
-      state.hasError = true;
-    },
-    [deleteBrand.pending]: (state, action) => {
-      state.isLoading = true;
-      state.hasError = false;
-    },
-    [deleteBrand.fulfilled]: (state, action) => {
-      state.brandsList = deleteById(action.payload.id, state.brandsList);
-      state.isLoading = false;
-      state.hasError = false;
-    },
-    [deleteBrand.rejected]: (state, action) => {
-      state.isLoading = false;
-      state.hasError = true;
-    },
-    [addBrand.pending]: (state, action) => {
-      state.isLoading = true;
-      state.hasError = false;
-    },
-    [addBrand.fulfilled]: (state, action) => {
-      state.brandsList.push(action.payload);
-      state.isLoading = false;
-      state.hasError = false;
-    },
-    [addBrand.rejected]: (state, action) => {
-      state.isLoading = false;
-      state.hasError = true;
-    },
-    [loadMaterials.pending]: (state, action) => {
-      state.isLoading = true;
-      state.hasError = false;
-    },
-    [loadMaterials.fulfilled]: (state, action) => {
-      state.materialsList = action.payload;
-      state.isLoading = false;
-      state.hasError = false;
-    },
-    [loadMaterials.rejected]: (state, action) => {
-      state.isLoading = false;
-      state.hasError = true;
-    },
-    [deleteMaterial.pending]: (state, action) => {
-      state.isLoading = true;
-      state.hasError = false;
-    },
-    [deleteMaterial.fulfilled]: (state, action) => {
-      state.materialsList = deleteById(action.payload.id, state.brandsList);
-      state.isLoading = false;
-      state.hasError = false;
-    },
-    [deleteMaterial.rejected]: (state, action) => {
-      state.isLoading = false;
-      state.hasError = true;
-    },
-    [addMaterial.pending]: (state, action) => {
-      state.isLoading = true;
-      state.hasError = false;
-    },
-    [addMaterial.fulfilled]: (state, action) => {
-      state.materialsList.push(action.payload);
-      state.isLoading = false;
-      state.hasError = false;
-    },
-    [addMaterial.rejected]: (state, action) => {
-      state.isLoading = false;
-      state.hasError = true;
-    },
-    [uploadImages.pending]: (state, action) => {
-      state.isLoading = true;
-      state.hasError = false;
-    },
-    [uploadImages.fulfilled]: (state, action) => {
-      console.log(action.payload);
-      state.imageIdsArray = action.payload;
-      state.isLoading = false;
-      state.hasError = false;
-    },
-    [uploadImages.rejected]: (state, action) => {
-      state.isLoading = false;
-      state.hasError = true;
-    },
+  extraReducers: (builder) => {
+    builder
+      .addCase(loadImages.pending, (state, action) => {
+        state.isLoading = true;
+        state.hasError = false;
+      })
+      .addCase(loadImages.fulfilled, (state, action) => {
+        state.imagesList = action.payload;
+        state.isLoading = false;
+        state.hasError = false;
+      })
+      .addCase(loadImages.rejected, (state, action) => {
+        state.isLoading = false;
+        state.hasError = true;
+      })
+      .addCase(loadDimensions.pending, (state, action) => {
+        state.isLoading = true;
+        state.hasError = false;
+      })
+      .addCase(loadDimensions.fulfilled, (state, action) => {
+        state.dimensionsList = action.payload;
+        state.isLoading = false;
+        state.hasError = false;
+      })
+      .addCase(loadDimensions.rejected, (state, action) => {
+        state.isLoading = false;
+        state.hasError = true;
+      })
+      .addCase(deleteDimension.pending, (state, action) => {
+        state.isLoading = true;
+        state.hasError = false;
+      })
+      .addCase(deleteDimension.fulfilled, (state, action) => {
+        console.log(action.payload);
+        state.dimensionsList = deleteById(
+          action.payload.id,
+          state.dimensionsList
+        );
+        state.isLoading = false;
+        state.hasError = false;
+      })
+      .addCase(deleteDimension.rejected, (state, action) => {
+        state.isLoading = false;
+        state.hasError = true;
+      })
+      .addCase(addDimension.pending, (state, action) => {
+        state.isLoading = true;
+        state.hasError = false;
+      })
+      .addCase(addDimension.fulfilled, (state, action) => {
+        state.dimensionsList.push(action.payload);
+        state.isLoading = false;
+        state.hasError = false;
+      })
+      .addCase(addDimension.rejected, (state, action) => {
+        state.isLoading = false;
+        state.hasError = true;
+      })
+      .addCase(loadBrands.pending, (state, action) => {
+        state.isLoading = true;
+        state.hasError = false;
+      })
+      .addCase(loadBrands.fulfilled, (state, action) => {
+        state.brandsList = action.payload;
+        state.isLoading = false;
+        state.hasError = false;
+      })
+      .addCase(loadBrands.rejected, (state, action) => {
+        state.isLoading = false;
+        state.hasError = true;
+      })
+      .addCase(deleteBrand.pending, (state, action) => {
+        state.isLoading = true;
+        state.hasError = false;
+      })
+      .addCase(deleteBrand.fulfilled, (state, action) => {
+        state.brandsList = deleteById(action.payload.id, state.brandsList);
+        state.isLoading = false;
+        state.hasError = false;
+      })
+      .addCase(deleteBrand.rejected, (state, action) => {
+        state.isLoading = false;
+        state.hasError = true;
+      })
+      .addCase(addBrand.pending, (state, action) => {
+        state.isLoading = true;
+        state.hasError = false;
+      })
+      .addCase(addBrand.fulfilled, (state, action) => {
+        state.brandsList.push(action.payload);
+        state.isLoading = false;
+        state.hasError = false;
+      })
+      .addCase(addBrand.rejected, (state, action) => {
+        state.isLoading = false;
+        state.hasError = true;
+      })
+      .addCase(loadMaterials.pending, (state, action) => {
+        state.isLoading = true;
+        state.hasError = false;
+      })
+      .addCase(loadMaterials.fulfilled, (state, action) => {
+        state.materialsList = action.payload;
+        state.isLoading = false;
+        state.hasError = false;
+      })
+      .addCase(loadMaterials.rejected, (state, action) => {
+        state.isLoading = false;
+        state.hasError = true;
+      })
+      .addCase(deleteMaterial.pending, (state, action) => {
+        state.isLoading = true;
+        state.hasError = false;
+      })
+      .addCase(deleteMaterial.fulfilled, (state, action) => {
+        state.materialsList = deleteById(action.payload.id, state.brandsList);
+        state.isLoading = false;
+        state.hasError = false;
+      })
+      .addCase(deleteMaterial.rejected, (state, action) => {
+        state.isLoading = false;
+        state.hasError = true;
+      })
+      .addCase(addMaterial.pending, (state, action) => {
+        state.isLoading = true;
+        state.hasError = false;
+      })
+      .addCase(addMaterial.fulfilled, (state, action) => {
+        state.materialsList.push(action.payload);
+        state.isLoading = false;
+        state.hasError = false;
+      })
+      .addCase(addMaterial.rejected, (state, action) => {
+        state.isLoading = false;
+        state.hasError = true;
+      })
+      .addCase(uploadImages.pending, (state, action) => {
+        state.isLoading = true;
+        state.hasError = false;
+      })
+      .addCase(uploadImages.fulfilled, (state, action) => {
+        console.log(action.payload);
+        state.imageIdsArray = action.payload;
+        state.isLoading = false;
+        state.hasError = false;
+      })
+      .addCase(uploadImages.rejected, (state, action) => {
+        state.isLoading = false;
+        state.hasError = true;
+      });
   },
 });
 

@@ -99,79 +99,79 @@ const productsSlice = createSlice({
         : state.selectedItems.push(action.payload);
     },
   },
-  extraReducers: {
-    [loadProducts.pending]: (state, action) => {
-      state.isLoading = true;
-      state.hasError = false;
-    },
-    [loadProducts.fulfilled]: (state, action) => {
-      state.productsList = action.payload;
-      state.isLoading = false;
-      state.hasError = false;
-    },
-    [loadProducts.rejected]: (state, action) => {
-      state.isLoading = false;
-      state.hasError = true;
-    },
-    [createProduct.pending]: (state, action) => {
-      state.isLoading = true;
-      state.hasError = false;
-    },
-    [createProduct.fulfilled]: (state, action) => {
-      state.productsList.push(action.payload);
-      state.isLoading = false;
-      state.hasError = false;
-    },
-    [createProduct.rejected]: (state, action) => {
-      state.isLoading = false;
-      state.hasError = true;
-    },
-    [findProductDetails.pending]: (state, action) => {
-      state.isLoading = true;
-      state.hasError = false;
-    },
-    [findProductDetails.fulfilled]: (state, action) => {
-      console.log(action.payload);
-      state.productDetails = action.payload;
-      state.isLoading = false;
-      state.hasError = false;
-    },
-    [findProductDetails.rejected]: (state, action) => {
-      state.isLoading = false;
-      state.hasError = true;
-    },
-    [updateProduct.pending]: (state, action) => {
-      state.isLoading = true;
-      state.hasError = false;
-    },
-    [updateProduct.fulfilled]: (state, action) => {
-      const res = action.payload.data;
-      console.log(res);
-      state.productsList = state.productsList.map((item) => {
-        return item.id === res.id ? (item = res.data) : item;
+  extraReducers: (builder) => {
+    builder
+      .addCase(loadProducts.pending, (state, action) => {
+        state.isLoading = true;
+        state.hasError = false;
+      })
+      .addCase(loadProducts.fulfilled, (state, action) => {
+        state.productsList = action.payload;
+        state.isLoading = false;
+        state.hasError = false;
+      })
+      .addCase(loadProducts.rejected, (state, action) => {
+        state.isLoading = false;
+        state.hasError = true;
+      })
+      .addCase(createProduct.pending, (state, action) => {
+        state.isLoading = true;
+        state.hasError = false;
+      })
+      .addCase(createProduct.fulfilled, (state, action) => {
+        state.productsList.push(action.payload);
+        state.isLoading = false;
+        state.hasError = false;
+      })
+      .addCase(createProduct.rejected, (state, action) => {
+        state.isLoading = false;
+        state.hasError = true;
+      })
+      .addCase(findProductDetails.pending, (state, action) => {
+        state.isLoading = true;
+        state.hasError = false;
+      })
+      .addCase(findProductDetails.fulfilled, (state, action) => {
+        state.productDetails = action.payload;
+        state.isLoading = false;
+        state.hasError = false;
+      })
+      .addCase(findProductDetails.rejected, (state, action) => {
+        state.isLoading = false;
+        state.hasError = true;
+      })
+      .addCase(updateProduct.pending, (state, action) => {
+        state.isLoading = true;
+        state.hasError = false;
+      })
+      .addCase(updateProduct.fulfilled, (state, action) => {
+        const res = action.payload.data;
+        console.log(res);
+        state.productsList = state.productsList.map((item) => {
+          return item.id === res.id ? (item = res.data) : item;
+        });
+        state.isLoading = false;
+        state.hasError = false;
+      })
+      .addCase(updateProduct.rejected, (state, action) => {
+        state.isLoading = false;
+        state.hasError = true;
+      })
+      .addCase(deleteProduct.pending, (state, action) => {
+        state.isLoading = true;
+        state.hasError = false;
+      })
+      .addCase(deleteProduct.fulfilled, (state, action) => {
+        state.productsList = state.productsList.filter(
+          (item) => !action.payload.idArray.includes(item.id)
+        );
+        state.isLoading = false;
+        state.hasError = false;
+      })
+      .addCase(deleteProduct.rejected, (state, action) => {
+        state.isLoading = false;
+        state.hasError = true;
       });
-      state.isLoading = false;
-      state.hasError = false;
-    },
-    [updateProduct.rejected]: (state, action) => {
-      state.isLoading = false;
-      state.hasError = true;
-    },
-    [deleteProduct.pending]: (state, action) => {
-      state.isLoading = true;
-      state.hasError = false;
-    },
-    [deleteProduct.fulfilled]: (state, action) => {
-      state.productsList = state.productsList.filter(
-        (item) => !action.payload.idArray.includes(item.id)
-      );
-      state.isLoading = false;
-      state.hasError = false;
-    },
-    [deleteProduct.rejected]: (state, action) => {
-      state.isLoading = false;
-      state.hasError = true;
-    },
   },
 });
 
@@ -197,10 +197,7 @@ export const isLoadingProducts = (state) => {
   return state.products.isLoading;
 };
 
-export const {
-  setSearchTerm,
-  setProductDetails,
-  selectItem,
-} = productsSlice.actions;
+export const { setSearchTerm, setProductDetails, selectItem } =
+  productsSlice.actions;
 
 export default productsSlice.reducer;

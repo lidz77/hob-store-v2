@@ -20,20 +20,35 @@ import Search from "@mui/icons-material/Search";
 
 const FilterBox = ({
   categoriesList,
-  handleLoadFilterOptions,
   dimensionsList,
   brandsList,
+  handleFilter,
+  brand,
+  setBrand,
+  category,
+  setCategory,
+  dimension,
+  setDimension,
+  setSearchTerm,
+  searchTerm,
+  clearFilter,
 }) => {
-  const [category, setCategory] = useState(null);
-  const [dimension, setDimension] = useState(null);
-  const [brand, setBrand] = useState([]);
-  const [searchText, setSearchText] = useState();
-
-  const handleBrandChecker = (brandId) => {};
+  const handleBrandChecker = (brandId) => {
+    if (brand.includes(brandId)) {
+      setBrand(brand.filter((item) => item !== brandId));
+    } else {
+      setBrand([...brand, brandId]);
+    }
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleFilter();
+  };
 
   useEffect(() => {
-    handleLoadFilterOptions();
-  }, []);
+    setBrand(brandsList.map((item) => item.id));
+    // handleLoadFilterOptions();
+  }, [brandsList]);
 
   return (
     <Container
@@ -43,77 +58,84 @@ const FilterBox = ({
         flexWrap: "wrap",
       }}
     >
-      <FormControl fullWidth>
-        <InputLabel id="home-select-category">Category</InputLabel>
-        <Select
-          labelId="home-select-category"
-          onChange={(e) => setCategory(e.target.value)}
-          value={category || ""}
-        >
-          {categoriesList &&
-            categoriesList.map((item, index) => {
-              return (
-                <MenuItem value={item.id} key={index}>
-                  {item.name}
-                </MenuItem>
-              );
-            })}
-        </Select>
-      </FormControl>
-      <FormControl fullWidth>
-        <InputLabel id="home-select-dimension">Dimension</InputLabel>
-        <Select
-          labelId="home-select-dimension"
-          onChange={(e) => setDimension(e.target.value)}
-          value={dimension || ""}
-        >
-          {dimensionsList &&
-            dimensionsList.map((item, index) => {
-              return (
-                <MenuItem value={item.id} key={index}>
-                  {item.name}
-                </MenuItem>
-              );
-            })}
-        </Select>
-      </FormControl>
-      <FormControl fullWidth>
-        <InputLabel htmlFor="home-search">Search</InputLabel>
-        <OutlinedInput
-          id="home-search"
-          variant="filled"
-          endAdornment={
-            <InputAdornment position="start">
-              <IconButton>
-                <Search />
-              </IconButton>
-            </InputAdornment>
-          }
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-        />
-      </FormControl>
-      <FormControl fullWidth>
-        <List>
-          {brandsList &&
-            brandsList.map((item, index) => {
-              return (
-                <ListItem key={item.id}>
-                  <ListItemButton>
-                    <ListItemText primary={item.name} />
-                    <Checkbox />
-                  </ListItemButton>
-                </ListItem>
-              );
-            })}
-        </List>
-      </FormControl>
-      <Button primary sm={6} type="submit">
-        Find
-      </Button>
-      <Button secondary sm={6}>
-        Clear
-      </Button>
+      <form onSubmit={handleSubmit}>
+        <FormControl fullWidth>
+          <InputLabel id="home-select-category">Category</InputLabel>
+          <Select
+            labelId="home-select-category"
+            onChange={(e) => setCategory(e.target.value)}
+            value={category}
+          >
+            <MenuItem value={0}>ALL</MenuItem>
+            {categoriesList &&
+              categoriesList.map((item, index) => {
+                return (
+                  <MenuItem value={item.id} key={index}>
+                    {item.name}
+                  </MenuItem>
+                );
+              })}
+          </Select>
+        </FormControl>
+        <FormControl fullWidth>
+          <InputLabel id="home-select-dimension">Dimension</InputLabel>
+          <Select
+            labelId="home-select-dimension"
+            onChange={(e) => setDimension(e.target.value)}
+            value={dimension}
+          >
+            <MenuItem value={0}>ALL</MenuItem>
+            {dimensionsList &&
+              dimensionsList.map((item, index) => {
+                return (
+                  <MenuItem value={item.id} key={index}>
+                    {item.name}
+                  </MenuItem>
+                );
+              })}
+          </Select>
+        </FormControl>
+        <FormControl fullWidth>
+          <InputLabel htmlFor="home-search">Search</InputLabel>
+          <OutlinedInput
+            id="home-search"
+            variant="filled"
+            endAdornment={
+              <InputAdornment position="start">
+                <IconButton>
+                  <Search />
+                </IconButton>
+              </InputAdornment>
+            }
+            value={searchTerm || ""}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </FormControl>
+        <FormControl fullWidth>
+          <List>
+            {brandsList &&
+              brandsList.map((item, index) => {
+                return (
+                  <ListItem key={item.id}>
+                    <ListItemButton>
+                      <ListItemText primary={item.name} />
+                      <Checkbox
+                        onChange={() => handleBrandChecker(item.id)}
+                        defaultChecked={true}
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                );
+              })}
+          </List>
+        </FormControl>
+        <Button sm={6} type="submit">
+          Find
+        </Button>
+        <Button sm={6} onClick={clearFilter}>
+          Clear
+        </Button>
+      </form>
     </Container>
   );
 };

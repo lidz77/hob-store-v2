@@ -1,6 +1,10 @@
 import http from "../../http-common";
 
 class ProductsDataService {
+  getByAttributes(filterObject) {
+    //axios get request should not have body, it should be received as query in sever's request
+    return http.get("/products/client", { params: filterObject });
+  }
   getAll() {
     return http.get("/products/");
   }

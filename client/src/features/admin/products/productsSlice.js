@@ -1,6 +1,22 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import ProductsDataService from "../../../services/products/products.services";
 
+export const clientLoadProducts = createAsyncThunk(
+  "products/clientLoadProducts",
+  async (filterObject) => {
+    console.log(filterObject);
+    const res = await ProductsDataService.getByAttributes(filterObject)
+      .then((result) => {
+        console.log(result);
+        return result.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    return res;
+  }
+);
+
 export const loadProducts = createAsyncThunk(
   "products/loadProducts",
   async () => {
@@ -82,6 +98,7 @@ const productsSlice = createSlice({
     isLoading: true,
     hasError: false,
     searchTerm: "",
+    paging: {},
     selectedItems: [],
   },
   reducers: {
@@ -101,6 +118,24 @@ const productsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(clientLoadProducts.pending, (state, action) => {
+        state.isLoading = true;
+        state.hasError = false;
+      })
+      .addCase(clientLoadProducts.fulfilled, (state, action) => {
+        console.log(action.payload);
+        state.productsList = action.payload.data;
+        state.paging.totalItems = action.payload.count;
+        state.paging.pageNumber = action.payload.currentPage;
+        state.paging.totalPages = action.payload.totalPages;
+        // state.productList.totalItems = action.payload.count;
+        state.isLoading = false;
+        state.hasError = false;
+      })
+      .addCase(clientLoadProducts.rejected, (state, action) => {
+        state.isLoading = false;
+        state.hasError = true;
+      })
       .addCase(loadProducts.pending, (state, action) => {
         state.isLoading = true;
         state.hasError = false;
@@ -184,6 +219,11 @@ export const selectVisibleProducts = (state) => {
     item.title.toLowerCase().includes(state.products.searchTerm.toLowerCase())
   );
 };
+export const selectClientProducts = (state) => {
+  return state.products.productsList.filter((item) =>
+    item.title.toLowerCase().includes(state.products.searchTerm.toLowerCase())
+  );
+};
 
 export const selectSearchTerm = (state) => {
   return state.products.searchTerm;
@@ -195,6 +235,9 @@ export const selectedItems = (state) => {
 
 export const isLoadingProducts = (state) => {
   return state.products.isLoading;
+};
+export const selectPaging = (state) => {
+  return state.products.paging;
 };
 
 export const { setSearchTerm, setProductDetails, selectItem } =

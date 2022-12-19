@@ -4,6 +4,7 @@ module.exports = (app) => {
 
   // productsRouter.get('/brands', brandsController.findAll);
   productsRouter.post("/", productsController.create);
+  productsRouter.get("/client", productsController.clientFindAll);
   productsRouter.get("/", productsController.findAll);
   productsRouter.get("/:id", productsController.findById);
   // dunno why express thinks /:id can be dimension or brands, should add ?id=:id, or should put parent's "get" function to the last

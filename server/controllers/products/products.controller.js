@@ -1,4 +1,6 @@
 const db = require("../../models");
+const helper = require("../helper");
+const Op = db.Sequelize.Op;
 const Products = db.products;
 const Categories = db.categories;
 const Dimensions = db.dimensions;
@@ -14,6 +16,7 @@ const relationalArray = [
   },
   {
     model: Dimensions,
+    as: "dimension",
     attributes: ["name"],
   },
   {
@@ -31,6 +34,25 @@ const relationalArray = [
     as: "productImages",
     attributes: ["id"],
   },
+];
+const clientFindAllArray = [
+  {
+    model: Brands,
+    as: "brand",
+    attributes: ["name"],
+  },
+  {
+    model: ProductImages,
+    as: "productImages",
+    attributes: ["name", "data"],
+    limit: 1,
+  },
+  // {
+  //   model: Dimensions,
+  //   as: "dimension",
+  //   attributes: ["name"],
+  //   limit: 1,
+  // },
 ];
 
 exports.create = (req, res) => {
@@ -86,6 +108,88 @@ exports.findAll = (req, res) => {
       console.log(result);
       res.send(result);
     })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Cant get the product",
+      });
+    });
+};
+
+exports.clientFindAll = (req, res) => {
+  console.log(req.query);
+  const limit = 3;
+  let { pageNumber, searchTerm, brand, dimension, category } = req.query;
+  var condition = { title: { [Op.like]: `%${searchTerm}%` } };
+  pageNumber = typeof pageNumber !== "undefined" ? parseInt(pageNumber) : 0;
+  if (dimension != 0) {
+    console.log("dimension", dimension);
+    condition = { ...condition, dimensionId: { [Op.eq]: dimension } };
+  }
+  if (category != 0) {
+    console.log("category", category);
+    condition = { ...condition, categoryId: { [Op.eq]: category } };
+  }
+  if (typeof brand !== "undefined") {
+    condition = { ...condition, brandId: { [Op.in]: brand } };
+  }
+
+  Products.findAndCountAll({
+    attributes: ["id", "title", "price"],
+    where: condition,
+    limit: limit,
+    offset: pageNumber * limit,
+    include: clientFindAllArray,
+  })
+    .then((result) => {
+      const data = result.rows.map((item) => {
+        return {
+          id: item.id,
+          title: item.title,
+          brand: item.brand.name,
+          productImages: {
+            alt: item.productImages[0].name,
+            url: helper.convertUrl(item.productImages[0].data),
+          },
+        };
+      });
+      res.status(200).send({
+        count: result.count,
+        currentPage: pageNumber,
+        totalPages: Math.ceil(result.count / limit),
+        data: data,
+      });
+    })
+    // .then((productResult) => {
+    //   const data = Products.count().then((result) => {
+    //     return {
+    //       data: productResult.map((item) => {
+    //         return {
+    //           id: item.id,
+    //           title: item.title,
+    //           price: item.price,
+    //           brand: item.brand.name,
+    //           productImages: {
+    //             alt: item.productImages[0].name,
+    //             url: helper.convertUrl(item.productImages[0].data),
+    //           },
+    //         };
+    //       }),
+    //       total: result,
+    //     };
+    //   });
+    // const data = result.map((item) => {
+    //   return {
+    //     id: item.id,
+    //     title: item.title,
+    //     price: item.price,
+    //     brand: item.brand.name,
+    //     productImages: {
+    //       alt: item.productImages[0].name,
+    //       url: helper.convertUrl(item.productImages[0].data),
+    //     },
+    //   };
+    // });
+    // })
     .catch((err) => {
       res.status(500).send({
         message: err.message || "Cant get the product",

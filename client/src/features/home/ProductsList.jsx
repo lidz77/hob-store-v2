@@ -12,7 +12,6 @@ import {
   selectDimensions,
 } from "../admin/products/productPropsSlice";
 import ProductCard from "../../components/home/ProductCard";
-import { Container } from "@mui/system";
 import {
   clientLoadProducts,
   selectClientProducts,
@@ -66,9 +65,9 @@ const ProductsList = (props) => {
   };
 
   return (
-    <Container maxWidth="xl">
-      <Grid container spacing={2}>
-        <Grid item sm={2}>
+    <Grid maxWidth="xl" sx={{ flexGrow: 1, padding: "auto" }}>
+      <Grid container spacing={2} alignItems="center" direction="row">
+        <Grid item sm={3}>
           <FilterBox
             categoriesList={categoriesList}
             dimensionsList={dimensionsList}
@@ -85,40 +84,43 @@ const ProductsList = (props) => {
             clearFilter={clearFilter}
           />
         </Grid>
-        <Grid item xl>
+        <Grid container item sm={9} spacing={1}>
           {productsList &&
             productsList.map((item, index) => {
               return (
-                <ProductCard
-                  key={index}
-                  productName={item.title}
-                  productPrice={item.price}
-                  productBrand={item.brand}
-                  productAlt={item.productImages.alt}
-                  productUrl={`data:image;base64, ${item.productImages.url}`}
-                />
+                <Grid item key={index}>
+                  <ProductCard
+                    productName={item.title}
+                    productPrice={item.price}
+                    productBrand={item.brand}
+                    productAlt={item.productImages.alt}
+                    productUrl={`data:image;base64, ${item.productImages.url}`}
+                  />
+                </Grid>
               );
             })}
         </Grid>
       </Grid>
-      <Stack spacing={2}>
-        <Pagination
-          count={paging.totalPages}
-          color="secondary"
-          page={pageNumber + 1}
-          onChange={(e, page) => {
-            console.log(page);
-            try {
-              setPageNumber(page - 1);
-            } finally {
-              handleFilter();
-            }
-          }}
-          hideNextButton
-          hidePrevButton
-        />
-      </Stack>
-    </Container>
+      <Grid container xl={12} alignItems="center" direction="column">
+        <Stack spacing={2}>
+          <Pagination
+            count={paging.totalPages}
+            color="secondary"
+            page={pageNumber + 1}
+            onChange={(e, page) => {
+              console.log(page);
+              try {
+                setPageNumber(page - 1);
+              } finally {
+                handleFilter();
+              }
+            }}
+            hideNextButton
+            hidePrevButton
+          />
+        </Stack>
+      </Grid>
+    </Grid>
   );
 };
 ProductsList.propTypes = {};

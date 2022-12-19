@@ -117,7 +117,7 @@ exports.findAll = (req, res) => {
 
 exports.clientFindAll = (req, res) => {
   console.log(req.query);
-  const limit = 3;
+  const limit = 4;
   let { pageNumber, searchTerm, brand, dimension, category } = req.query;
   var condition = { title: { [Op.like]: `%${searchTerm}%` } };
   pageNumber = typeof pageNumber !== "undefined" ? parseInt(pageNumber) : 0;

@@ -6,6 +6,15 @@ import { Outlet } from "react-router-dom";
 
 const defaultTheme = createTheme({
   palette: {},
+  components: {
+    MuiFormControl: {
+      styleOverrides: {
+        root: {
+          padding: 10,
+        },
+      },
+    },
+  },
 });
 
 const Home = (props) => {
@@ -14,7 +23,7 @@ const Home = (props) => {
       <Container sx={{ maxWidth: "xl", marginBottom: "50px" }}>
         <MainMenu />
       </Container>
-      <Container sx={{ maxWidth: "md" }}>
+      <Container sx={{ maxWidth: "lg" }}>
         <Outlet />
       </Container>
     </ThemeProvider>

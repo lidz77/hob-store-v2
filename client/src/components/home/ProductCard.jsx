@@ -17,7 +17,7 @@ const ProductCard = ({
   productUrl,
 }) => {
   return (
-    <Card sx={{ maxWidth: 300 }} id={`product-id-${productId}`}>
+    <Card sx={{ width: 250, height: 250 }} id={`product-id-${productId}`}>
       <CardActionArea>
         <CardMedia
           component="img"

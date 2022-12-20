@@ -11,6 +11,7 @@ class ProductsDataService {
   create(data) {
     return http.post("/products/", data);
   }
+
   findById(id) {
     return http.get(`/products/${id}`, id);
   }

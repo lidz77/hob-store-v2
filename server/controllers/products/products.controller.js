@@ -159,37 +159,6 @@ exports.clientFindAll = (req, res) => {
         data: data,
       });
     })
-    // .then((productResult) => {
-    //   const data = Products.count().then((result) => {
-    //     return {
-    //       data: productResult.map((item) => {
-    //         return {
-    //           id: item.id,
-    //           title: item.title,
-    //           price: item.price,
-    //           brand: item.brand.name,
-    //           productImages: {
-    //             alt: item.productImages[0].name,
-    //             url: helper.convertUrl(item.productImages[0].data),
-    //           },
-    //         };
-    //       }),
-    //       total: result,
-    //     };
-    //   });
-    // const data = result.map((item) => {
-    //   return {
-    //     id: item.id,
-    //     title: item.title,
-    //     price: item.price,
-    //     brand: item.brand.name,
-    //     productImages: {
-    //       alt: item.productImages[0].name,
-    //       url: helper.convertUrl(item.productImages[0].data),
-    //     },
-    //   };
-    // });
-    // })
     .catch((err) => {
       res.status(500).send({
         message: err.message || "Cant get the product",
@@ -207,7 +176,7 @@ exports.findById = (req, res) => {
       res.send(result);
     })
     .catch((err) => {
-      console.log("Error while finding dimension", err);
+      console.log("Error while finding product", err);
     });
 };
 

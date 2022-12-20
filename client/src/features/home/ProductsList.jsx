@@ -16,7 +16,10 @@ import {
   clientLoadProducts,
   selectClientProducts,
   selectPaging,
+  findProductDetails,
+  selectProductDetails,
 } from "../admin/products/productsSlice";
+import ProductDialog from "../../components/home/ProductDialog";
 
 const ProductsList = (props) => {
   const dispatch = useDispatch();
@@ -25,12 +28,15 @@ const ProductsList = (props) => {
   const brandsList = useSelector(selectBrands);
   const productsList = useSelector(selectClientProducts);
   const paging = useSelector(selectPaging);
+  const productDetails = useSelector(selectProductDetails);
   //filter state
   const [category, setCategory] = useState(0);
   const [dimension, setDimension] = useState(0);
   const [brand, setBrand] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [pageNumber, setPageNumber] = useState(0);
+  //product dialog
+  const [openDialog, setOpenDialog] = useState(false);
 
   useEffect(() => {
     dispatch(loadCategories());
@@ -64,6 +70,15 @@ const ProductsList = (props) => {
     handleFilter();
   };
 
+  const handleDialog = () => {
+    setOpenDialog(!openDialog);
+  };
+  const handleLoadProductDetails = (id) => {
+    console.log(id);
+    dispatch(findProductDetails(id));
+    setOpenDialog(true);
+  };
+
   return (
     <Grid maxWidth="xl" sx={{ flexGrow: 1, padding: "auto" }}>
       <Grid container spacing={2} alignItems="center" direction="row">
@@ -88,7 +103,11 @@ const ProductsList = (props) => {
           {productsList &&
             productsList.map((item, index) => {
               return (
-                <Grid item key={index}>
+                <Grid
+                  item
+                  key={index}
+                  onClick={() => handleLoadProductDetails(item.id)}
+                >
                   <ProductCard
                     productName={item.title}
                     productPrice={item.price}
@@ -120,6 +139,11 @@ const ProductsList = (props) => {
           />
         </Stack>
       </Grid>
+      <ProductDialog
+        openDialog={openDialog}
+        handleDialog={handleDialog}
+        productDetails={productDetails}
+      />
     </Grid>
   );
 };
